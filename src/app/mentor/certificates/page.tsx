@@ -328,11 +328,9 @@ export default function MentorCertificatesPage() {
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700">
-              <CardContent className="p-5">
+              <CardContent className="p-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-xl bg-[#005EB8]/10">
-                    <Award className="h-6 w-6 text-[#005EB8]" />
-                  </div>
+                  <Award className="h-8 w-8 text-[#005EB8]" />
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400">Total Sertifikat</p>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</p>
@@ -341,11 +339,9 @@ export default function MentorCertificatesPage() {
               </CardContent>
             </Card>
             <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700">
-              <CardContent className="p-5">
+              <CardContent className="p-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-xl bg-[#008A00]/10">
-                    <CheckCircle className="h-6 w-6 text-[#008A00]" />
-                  </div>
+                  <CheckCircle className="h-8 w-8 text-[#008A00]" />
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400">Terbit</p>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.issued}</p>
@@ -354,11 +350,9 @@ export default function MentorCertificatesPage() {
               </CardContent>
             </Card>
             <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700">
-              <CardContent className="p-5">
+              <CardContent className="p-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-xl bg-[#F4B400]/10">
-                    <Clock className="h-6 w-6 text-[#F4B400]" />
-                  </div>
+                  <Clock className="h-8 w-8 text-[#F4B400]" />
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400">Pending</p>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.pending}</p>
@@ -367,11 +361,9 @@ export default function MentorCertificatesPage() {
               </CardContent>
             </Card>
             <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700">
-              <CardContent className="p-5">
+              <CardContent className="p-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-xl bg-[#D93025]/10">
-                    <BookOpen className="h-6 w-6 text-[#D93025]" />
-                  </div>
+                  <BookOpen className="h-8 w-8 text-[#D93025]" />
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400">Kursus Aktif</p>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.courses}</p>
@@ -392,7 +384,7 @@ export default function MentorCertificatesPage() {
             <TabsContent value="certificates" className="space-y-4">
               {/* Certificates Table Card */}
               <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700 overflow-hidden">
-                <CardHeader className="pb-4 border-b border-gray-200 dark:border-gray-700">
+                <CardHeader className="pb-3 border-b border-gray-100 dark:border-gray-800">
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
                       <CardTitle className="text-xl font-bold flex items-center gap-2 text-gray-900 dark:text-white">
@@ -537,8 +529,8 @@ export default function MentorCertificatesPage() {
             <TabsContent value="settings" className="space-y-4">
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Signature Upload */}
-                <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-md border-gray-200 dark:border-gray-700">
-                  <CardHeader>
+                <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700">
+                  <CardHeader className="pb-3 border-b border-gray-100 dark:border-gray-800">
                     <CardTitle className="flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-white">
                       <PenTool className="h-5 w-5 text-[#005EB8]" />
                       Tanda Tangan Digital
@@ -547,7 +539,7 @@ export default function MentorCertificatesPage() {
                       Upload gambar tanda tangan Anda untuk sertifikat
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="p-6 space-y-4">
                     <div className="border-2 border-dashed rounded-lg p-6 text-center border-gray-300 dark:border-gray-600">
                       {config.signature_url ? (
                         <div className="space-y-4">
@@ -582,17 +574,17 @@ export default function MentorCertificatesPage() {
                 </Card>
 
                 {/* Template Selection */}
-                <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-md border-gray-200 dark:border-gray-700">
-                  <CardHeader>
+                <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700">
+                  <CardHeader className="pb-3 border-b border-gray-100 dark:border-gray-800">
                     <CardTitle className="flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-white">
                       <FileText className="h-5 w-5 text-[#005EB8]" />
                       Template Sertifikat
                     </CardTitle>
                     <CardDescription>
-                      Pilih template yang akan digunakan untuk sertifikat kursus Anda
+                      Pilih template yang akan digunakan untuk kursus Anda
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="p-6 space-y-4">
                     {templates.length === 0 ? (
                       <div className="text-center py-8">
                         <FileText className="h-12 w-12 text-gray-300 dark:text-gray-700 mx-auto mb-3" />
