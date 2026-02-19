@@ -40,6 +40,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import ProtectedRoute from "@/components/auth/protected-route";
+import { UserFilter } from "@/components/user/user-filter";
 
 type TransactionStatus = "PENDING" | "PAID" | "SUCCESS" | "FAILED" | "CANCELLED" | "REFUNDED";
 
@@ -346,32 +347,32 @@ export default function UserTransactions() {
                       className="pl-10 h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600"
                     />
                   </div>
-                  <Select value={filterStatus} onValueChange={setFilterStatus}>
-                    <SelectTrigger className="w-full md:w-[160px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                      <Filter className="h-4 w-4 mr-2 text-gray-400" />
-                      <SelectValue placeholder="Status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Semua Status</SelectItem>
-                      <SelectItem value="PENDING">Menunggu</SelectItem>
-                      <SelectItem value="SUCCESS">Berhasil</SelectItem>
-                      <SelectItem value="PAID">Dibayar</SelectItem>
-                      <SelectItem value="FAILED">Gagal</SelectItem>
-                      <SelectItem value="CANCELLED">Dibatalkan</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-full md:w-[160px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                      <ArrowUpDown className="h-4 w-4 mr-2 text-gray-400" />
-                      <SelectValue placeholder="Urutkan" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="newest">Terbaru</SelectItem>
-                      <SelectItem value="oldest">Terlama</SelectItem>
-                      <SelectItem value="amount-high">Nominal ↓</SelectItem>
-                      <SelectItem value="amount-low">Nominal ↑</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <UserFilter
+                    value={filterStatus}
+                    onValueChange={setFilterStatus}
+                    options={[
+                      { label: "Semua Status", value: "all" },
+                      { label: "Menunggu", value: "PENDING" },
+                      { label: "Berhasil", value: "SUCCESS" },
+                      { label: "Dibayar", value: "PAID" },
+                      { label: "Gagal", value: "FAILED" },
+                      { label: "Dibatalkan", value: "CANCELLED" },
+                    ]}
+                    placeholder="Status"
+                    className="md:w-[180px]"
+                  />
+                  <UserFilter
+                    value={sortBy}
+                    onValueChange={setSortBy}
+                    options={[
+                      { label: "Terbaru", value: "newest" },
+                      { label: "Terlama", value: "oldest" },
+                      { label: "Nominal ↓", value: "amount-high" },
+                      { label: "Nominal ↑", value: "amount-low" },
+                    ]}
+                    placeholder="Urutkan"
+                    className="md:w-[180px]"
+                  />
                 </div>
               </div>
 

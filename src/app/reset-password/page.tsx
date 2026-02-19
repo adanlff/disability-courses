@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ResetPasswordPage, Testimonial } from "@/components/auth/reset-password";
 import { ResetPasswordSuccessModal } from "@/components/modal/reset-password-modal";
 
-export default function ResetPasswordPageComponent() {
+function ResetPasswordContent() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
@@ -157,5 +157,20 @@ export default function ResetPasswordPageComponent() {
         error={error}
       />
     </div>
+  );
+}
+
+export default function ResetPasswordPageComponent() {
+  return (
+    <Suspense fallback={
+      <div className="h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Memuat halaman reset password...</p>
+        </div>
+      </div>
+    }>
+      <ResetPasswordContent />
+    </Suspense>
   );
 }

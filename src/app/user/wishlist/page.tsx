@@ -30,6 +30,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import ProtectedRoute from "@/components/auth/protected-route";
+import { UserFilter } from "@/components/user/user-filter";
 
 interface Course {
   id: string;
@@ -364,18 +365,18 @@ export default function UserWishlist() {
                     className="pl-10"
                   />
                 </div>
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-full md:w-[200px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                    <ArrowUpDown className="h-4 w-4 mr-2 text-gray-400" />
-                    <SelectValue placeholder="Urutkan" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="newest">Terbaru Ditambahkan</SelectItem>
-                    <SelectItem value="price-low">Harga Terendah</SelectItem>
-                    <SelectItem value="price-high">Harga Tertinggi</SelectItem>
-                    <SelectItem value="rating">Rating Tertinggi</SelectItem>
-                  </SelectContent>
-                </Select>
+                <UserFilter
+                  value={sortBy}
+                  onValueChange={setSortBy}
+                  options={[
+                    { label: "Terbaru Ditambahkan", value: "newest" },
+                    { label: "Harga Terendah", value: "price-low" },
+                    { label: "Harga Tertinggi", value: "price-high" },
+                    { label: "Rating Tertinggi", value: "rating" },
+                  ]}
+                  placeholder="Urutkan"
+                  className="md:w-[220px]"
+                />
               </div>
             </CardContent>
           </Card>

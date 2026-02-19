@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import ProtectedRoute from "@/components/auth/protected-route";
+import { UserFilter } from "@/components/user/user-filter";
 
 interface Course {
   id: string;
@@ -217,37 +218,28 @@ export default function UserCourses() {
                   />
                 </div>
                 <div className="flex gap-2">
-                  <Select
+                  <UserFilter
                     value={filterCategory}
                     onValueChange={setFilterCategory}
-                  >
-                    <SelectTrigger className="w-full md:w-[180px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                      <Filter className="h-4 w-4 mr-2 text-gray-400" />
-                      <SelectValue placeholder="Kategori" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Semua Kategori</SelectItem>
-                      {categories.map((cat) => (
-                        <SelectItem key={cat.id} value={cat.id}>
-                          {cat.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    options={[
+                      { label: "Semua Kategori", value: "all" },
+                      ...categories.map((cat) => ({ label: cat.name, value: cat.id })),
+                    ]}
+                    placeholder="Kategori"
+                    className="md:w-[210px]"
+                  />
 
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-full md:w-[180px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                      <ArrowUpDown className="h-4 w-4 mr-2 text-gray-400" />
-                      <SelectValue placeholder="Urutkan" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="recent">Terbaru Diakses</SelectItem>
-                      <SelectItem value="progress">
-                        Progress Tertinggi
-                      </SelectItem>
-                      <SelectItem value="title">Nama A-Z</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <UserFilter
+                    value={sortBy}
+                    onValueChange={setSortBy}
+                    options={[
+                      { label: "Terbaru Diakses", value: "recent" },
+                      { label: "Progress Tertinggi", value: "progress" },
+                      { label: "Nama A-Z", value: "title" },
+                    ]}
+                    placeholder="Urutkan"
+                    className="md:w-[200px]"
+                  />
                 </div>
               </div>
             </CardContent>

@@ -28,6 +28,7 @@ import {
 import UserLayout from "@/components/user/user-layout";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ProtectedRoute from "@/components/auth/protected-route";
+import { UserFilter } from "@/components/user/user-filter";
 
 interface Enrollment {
   id: string;
@@ -235,24 +236,21 @@ export default function UserEnrollments() {
                     className="pl-10"
                   />
                 </div>
-                <Select 
-                  value={filterStatus} 
+                <UserFilter
+                  value={filterStatus}
                   onValueChange={(v) => { 
                     setFilterStatus(v); 
                     fetchEnrollments(1); 
                   }}
-                >
-                  <SelectTrigger className="w-[180px]">
-                    <Filter className="h-4 w-4 mr-2" />
-                    <SelectValue placeholder="Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Semua Status</SelectItem>
-                    <SelectItem value="ACTIVE">Aktif</SelectItem>
-                    <SelectItem value="COMPLETED">Selesai</SelectItem>
-                    <SelectItem value="EXPIRED">Kadaluarsa</SelectItem>
-                  </SelectContent>
-                </Select>
+                  options={[
+                    { label: "Semua Status", value: "all" },
+                    { label: "Aktif", value: "ACTIVE" },
+                    { label: "Selesai", value: "COMPLETED" },
+                    { label: "Kadaluarsa", value: "EXPIRED" },
+                  ]}
+                  placeholder="Status"
+                  className="md:w-[190px]"
+                />
               </div>
             </CardContent>
           </Card>

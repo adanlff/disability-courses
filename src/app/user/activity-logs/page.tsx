@@ -42,6 +42,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import ProtectedRoute from "@/components/auth/protected-route";
+import { UserFilter } from "@/components/user/user-filter";
 import Pagination from "@/components/ui/pagination";
 
 interface ActivityLog {
@@ -258,20 +259,19 @@ export default function UserActivityLogs() {
                     className="pl-10"
                   />
                 </div>
-                <Select value={filterAction} onValueChange={setFilterAction}>
-                  <SelectTrigger className="w-full md:w-[240px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                    <Filter className="h-4 w-4 mr-2 text-gray-400" />
-                    <SelectValue placeholder="Jenis Aktivitas" />
-                  </SelectTrigger>
-                  <SelectContent className="min-w-[240px]">
-                    <SelectItem value="all">Semua Aktivitas</SelectItem>
-                    {uniqueActions.map((action) => (
-                      <SelectItem key={action} value={action}>
-                        {getActionConfig(action).label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <UserFilter
+                  value={filterAction}
+                  onValueChange={setFilterAction}
+                  options={[
+                    { label: "Semua Aktivitas", value: "all" },
+                    ...uniqueActions.map((action) => ({
+                      label: getActionConfig(action).label,
+                      value: action,
+                    })),
+                  ]}
+                  placeholder="Jenis Aktivitas"
+                  className="md:w-[260px]"
+                />
               </div>
             </CardContent>
           </Card>
