@@ -10,7 +10,7 @@ import {
   Loader2,
   Calendar,
   User,
-  Filter,
+  SlidersHorizontal,
   Clock,
   FileText,
   LogIn,
@@ -28,6 +28,7 @@ import {
   Globe,
   Monitor,
 } from "lucide-react";
+import { AdminFilter } from "@/components/admin/admin-filter";
 import AdminLayout from "@/components/admin/admin-layout";
 import ProtectedRoute from "@/components/auth/protected-route";
 import {
@@ -355,26 +356,22 @@ export default function AdminLogsPage() {
                     className="pl-10 border-gray-300 focus:border-[#005EB8] focus:ring-[#005EB8] dark:border-gray-600 dark:bg-gray-800 dark:text-white"
                   />
                 </div>
-                <Select
+                <AdminFilter
                   value={actionFilter}
                   onValueChange={(v) => {
                     setActionFilter(v);
                     setPagination(p => ({ ...p, page: 1 }));
                   }}
-                >
-                  <SelectTrigger className="border-gray-300 focus:border-[#005EB8] focus:ring-[#005EB8] dark:border-gray-600 dark:bg-gray-800 w-full md:w-[200px]">
-                    <Filter className="h-4 w-4 mr-2" />
-                    <SelectValue placeholder="Action" />
-                  </SelectTrigger>
-                  <SelectContent className="min-w-[200px]">
-                    <SelectItem value="all">Semua Action</SelectItem>
-                    {availableActions.map((action) => (
-                      <SelectItem key={action} value={action}>
-                        {getActionConfig(action).label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  options={[
+                    { label: "Semua Action", value: "all" },
+                    ...availableActions.map((action) => ({
+                      label: getActionConfig(action).label,
+                      value: action,
+                    })),
+                  ]}
+                  placeholder="Action"
+                  className="md:w-[200px]"
+                />
               </div>
             </CardContent>
           </Card>

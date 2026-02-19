@@ -36,7 +36,10 @@ import {
   TrendingUp,
   Award,
   Sparkles,
+  SlidersHorizontal,
+  Search,
 } from "lucide-react";
+import { AdminFilter } from "@/components/admin/admin-filter";
 import AdminLayout from "@/components/admin/admin-layout";
 import ProtectedRoute from "@/components/auth/protected-route";
 
@@ -118,6 +121,10 @@ export default function AdminSettings() {
 
   // Active tab
   const [activeTab, setActiveTab] = useState<"password" | "system">("password");
+
+  // Search and filter for system settings
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCategory, setFilterCategory] = useState("all");
 
   const getAuthToken = useCallback(() => typeof window !== "undefined" ? localStorage.getItem("token") || localStorage.getItem("accessToken") : null, []);
 
@@ -268,7 +275,14 @@ export default function AdminSettings() {
     }
   };
 
-  const groupedSettings = settings.reduce((acc, setting) => {
+  const filteredSettings = settings.filter(setting => {
+    const matchesSearch = setting.key.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                         setting.value.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = filterCategory === "all" || setting.category === filterCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  const groupedSettings = filteredSettings.reduce((acc, setting) => {
     const cat = setting.category || "general";
     if (!acc[cat]) acc[cat] = [];
     acc[cat].push(setting);
@@ -506,6 +520,31 @@ export default function AdminSettings() {
                 <div>
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white">Pengaturan Sistem</h2>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Kelola konfigurasi platform</p>
+                </div>
+                <div className="flex flex-col md:flex-row gap-3">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                    <Input
+                      type="search"
+                      placeholder="Cari setting..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10 h-10 w-full md:w-[250px] bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 focus:border-[#005EB8] focus:ring-[#005EB8]"
+                    />
+                  </div>
+                  <AdminFilter
+                    value={filterCategory}
+                    onValueChange={setFilterCategory}
+                    options={[
+                      { label: "Semua Kategori", value: "all" },
+                      { label: "General", value: "general" },
+                      { label: "Payment", value: "payment" },
+                      { label: "Email", value: "email" },
+                      { label: "Course", value: "course" },
+                      { label: "User", value: "user" },
+                    ]}
+                    placeholder="Kategori"
+                  />
                 </div>
               </div>
 

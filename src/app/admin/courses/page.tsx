@@ -16,12 +16,13 @@ import {
   Clock,
   Archive,
   Star,
-  Filter,
+  SlidersHorizontal,
   AlertCircle,
   X,
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
+import { AdminFilter } from '@/components/admin/admin-filter';
 import Link from 'next/link';
 import AdminLayout from '@/components/admin/admin-layout';
 import ProtectedRoute from "@/components/auth/protected-route";
@@ -652,38 +653,36 @@ export default function AdminCourses() {
                       className="pl-10 h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600"
                     />
                   </div>
-                  <Select value={filterStatus} onValueChange={(value) => {
-                    setFilterStatus(value);
-                    setPagination(prev => ({ ...prev, page: 1 }));
-                  }}>
-                    <SelectTrigger className="w-full md:w-[200px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                      <Filter className="h-4 w-4 mr-2 text-gray-400" />
-                      <SelectValue placeholder="Status" />
-                    </SelectTrigger>
-                    <SelectContent className="min-w-[200px]">
-                      <SelectItem value="all">Semua Status</SelectItem>
-                      <SelectItem value="PENDING_REVIEW">Menunggu Review</SelectItem>
-                      <SelectItem value="PUBLISHED">Published</SelectItem>
-                      <SelectItem value="DRAFT">Draft</SelectItem>
-                      <SelectItem value="ARCHIVED">Archived</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <AdminFilter
+                    value={filterStatus}
+                    onValueChange={(value) => {
+                      setFilterStatus(value);
+                      setPagination(prev => ({ ...prev, page: 1 }));
+                    }}
+                    options={[
+                      { label: "Semua Status", value: "all" },
+                      { label: "Menunggu Review", value: "PENDING_REVIEW" },
+                      { label: "Published", value: "PUBLISHED" },
+                      { label: "Draft", value: "DRAFT" },
+                      { label: "Archived", value: "ARCHIVED" },
+                    ]}
+                    placeholder="Status"
+                    className="md:w-[200px]"
+                  />
 
-                  <Select value={filterCategory} onValueChange={(value) => {
-                    setFilterCategory(value);
-                    setPagination(prev => ({ ...prev, page: 1 }));
-                  }}>
-                    <SelectTrigger className="w-full md:w-[160px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                      <Filter className="h-4 w-4 mr-2 text-gray-400" />
-                      <SelectValue placeholder="Kategori" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Semua Kategori</SelectItem>
-                      {categories.map((cat) => (
-                        <SelectItem key={cat} value={cat!}>{cat}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    <AdminFilter
+                      value={filterCategory}
+                      onValueChange={(value) => {
+                        setFilterCategory(value);
+                        setPagination(prev => ({ ...prev, page: 1 }));
+                      }}
+                      options={[
+                        { label: "Semua Kategori", value: "all" },
+                        ...categories.map((cat) => ({ label: cat!, value: cat! })),
+                      ]}
+                      placeholder="Kategori"
+                      className="md:w-[200px]"
+                    />
                 </div>
               </div>
 

@@ -14,8 +14,10 @@ import {
   CheckCircle,
   XCircle,
   Clock,
+  SlidersHorizontal,
   Loader2
 } from 'lucide-react';
+import { AdminFilter } from '@/components/admin/admin-filter';
 import AdminLayout from '@/components/admin/admin-layout';
 import ProtectedRoute from "@/components/auth/protected-route";
 import {
@@ -356,21 +358,22 @@ export default function AdminTransactions() {
                     className="pl-10 h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600"
                   />
                 </div>
-                <Select value={filterStatus} onValueChange={(value) => {
-                  setFilterStatus(value);
-                  setPagination(prev => ({ ...prev, page: 1 }));
-                }}>
-                  <SelectTrigger className="w-full md:w-[160px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                    <SelectValue placeholder="Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Semua Status</SelectItem>
-                    <SelectItem value="SUCCESS">Berhasil</SelectItem>
-                    <SelectItem value="PENDING">Pending</SelectItem>
-                    <SelectItem value="FAILED">Gagal</SelectItem>
-                    <SelectItem value="EXPIRED">Kadaluarsa</SelectItem>
-                  </SelectContent>
-                </Select>
+                <AdminFilter
+                  value={filterStatus}
+                  onValueChange={(value) => {
+                    setFilterStatus(value);
+                    setPagination(prev => ({ ...prev, page: 1 }));
+                  }}
+                  options={[
+                    { label: "Semua Status", value: "all" },
+                    { label: "Berhasil", value: "SUCCESS" },
+                    { label: "Pending", value: "PENDING" },
+                    { label: "Gagal", value: "FAILED" },
+                    { label: "Kadaluarsa", value: "EXPIRED" },
+                  ]}
+                  placeholder="Status"
+                  className="md:w-[160px]"
+                />
               </div>
             </div>
 

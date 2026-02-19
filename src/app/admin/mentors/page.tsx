@@ -18,9 +18,10 @@ import {
   Clock,
   Loader2,
   X,
-  Filter,
+  SlidersHorizontal,
   AlertCircle,
 } from 'lucide-react';
+import { AdminFilter } from '@/components/admin/admin-filter';
 import AdminLayout from '@/components/admin/admin-layout';
 import ProtectedRoute from "@/components/auth/protected-route";
 import MentorDetailModal from '@/components/modal/modal-mentor-detail';
@@ -457,21 +458,20 @@ export default function AdminMentors() {
                       className="pl-10 h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600"
                     />
                   </div>
-                  <Select value={filterStatus} onValueChange={(value) => {
-                    setFilterStatus(value);
-                    setPagination(prev => ({ ...prev, page: 1 }));
-                  }}>
-                    <SelectTrigger className="w-full md:w-[180px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                      <Filter className="h-4 w-4 mr-2 text-gray-400" />
-                      <SelectValue placeholder="Semua Status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Semua Status</SelectItem>
-                      <SelectItem value="APPROVED">Terverifikasi</SelectItem>
-                      <SelectItem value="PENDING">Menunggu</SelectItem>
-                      <SelectItem value="REJECTED">Ditolak</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <AdminFilter
+                    value={filterStatus}
+                    onValueChange={(value) => {
+                      setFilterStatus(value);
+                      setPagination(prev => ({ ...prev, page: 1 }));
+                    }}
+                    options={[
+                      { label: "Semua Status", value: "all" },
+                      { label: "Terverifikasi", value: "APPROVED" },
+                      { label: "Menunggu", value: "PENDING" },
+                      { label: "Ditolak", value: "REJECTED" },
+                    ]}
+                    placeholder="Status"
+                  />
                 </div>
               </div>
 

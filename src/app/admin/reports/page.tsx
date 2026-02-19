@@ -41,9 +41,11 @@ import {
   BarChart,
   FileBarChart,
   ChartBar,
+  SlidersHorizontal,
 } from "lucide-react";
 import AdminLayout from "@/components/admin/admin-layout";
 import ProtectedRoute from "@/components/auth/protected-route";
+import { AdminFilter } from "@/components/admin/admin-filter";
 
 interface RevenueReport {
   period: string;
@@ -169,18 +171,18 @@ export default function AdminReportsPage() {
               <p className="text-gray-600 dark:text-gray-400">Pantau performa platform secara komprehensif</p>
             </div>
             <div className="flex justify-center md:justify-end gap-2">
-              <Select value={period} onValueChange={setPeriod}>
-                <SelectTrigger className="w-[180px] border-gray-300 dark:border-gray-600 focus:border-[#005EB8] focus:ring-[#005EB8]">
-                  <Calendar className="h-4 w-4 mr-2 text-gray-500" />
-                  <SelectValue placeholder="Pilih Periode" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="week">7 Hari Terakhir</SelectItem>
-                  <SelectItem value="month">30 Hari Terakhir</SelectItem>
-                  <SelectItem value="quarter">3 Bulan Terakhir</SelectItem>
-                  <SelectItem value="year">1 Tahun Terakhir</SelectItem>
-                </SelectContent>
-              </Select>
+              <AdminFilter
+                value={period}
+                onValueChange={setPeriod}
+                options={[
+                  { label: "7 Hari Terakhir", value: "week" },
+                  { label: "30 Hari Terakhir", value: "month" },
+                  { label: "3 Bulan Terakhir", value: "quarter" },
+                  { label: "1 Tahun Terakhir", value: "year" },
+                ]}
+                placeholder="Pilih Periode"
+                className="w-[200px]"
+              />
             </div>
           </div>
 

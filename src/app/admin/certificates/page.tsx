@@ -18,10 +18,12 @@ import {
   CheckCircle,
   Clock,
   XCircle,
+  SlidersHorizontal,
   AlertCircle,
   Code,
   Edit,
 } from "lucide-react";
+import { AdminFilter } from "@/components/admin/admin-filter";
 import AdminLayout from "@/components/admin/admin-layout";
 import ProtectedRoute from "@/components/auth/protected-route";
 import SweetAlert, { AlertType } from "@/components/ui/sweet-alert";
@@ -566,17 +568,17 @@ export default function AdminCertificatesPage() {
                           className="pl-10 h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600" 
                         />
                       </div>
-                      <Select value={filterStatus} onValueChange={setFilterStatus}>
-                        <SelectTrigger className="w-full md:w-[180px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                          <SelectValue placeholder="Status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">Semua Status</SelectItem>
-                          <SelectItem value="ISSUED">Terbit</SelectItem>
-                          <SelectItem value="PENDING">Pending</SelectItem>
-                          <SelectItem value="REVOKED">Dicabut</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <AdminFilter
+                        value={filterStatus}
+                        onValueChange={setFilterStatus}
+                        options={[
+                          { label: "Semua Status", value: "all" },
+                          { label: "Terbit", value: "ISSUED" },
+                          { label: "Pending", value: "PENDING" },
+                          { label: "Dicabut", value: "REVOKED" },
+                        ]}
+                        placeholder="Status"
+                      />
                     </div>
                   </div>
 

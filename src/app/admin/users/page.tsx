@@ -18,8 +18,9 @@ import {
   Trash2,
   AlertCircle,
   Shield,
-  Filter,
+  SlidersHorizontal,
 } from 'lucide-react';
+import { AdminFilter } from '@/components/admin/admin-filter';
 import AdminLayout from '@/components/admin/admin-layout';
 import ProtectedRoute from "@/components/auth/protected-route";
 import {
@@ -482,37 +483,35 @@ export default function AdminUsers() {
                       className="pl-10 h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600"
                     />
                   </div>
-                  <Select value={filterStatus} onValueChange={(value) => {
-                    setFilterStatus(value);
-                    setPagination(prev => ({ ...prev, page: 1 }));
-                  }}>
-                    <SelectTrigger className="w-full md:w-[160px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                      <Filter className="h-4 w-4 mr-2 text-gray-400" />
-                      <SelectValue placeholder="Status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Semua Status</SelectItem>
-                      <SelectItem value="ACTIVE">Aktif</SelectItem>
-                      <SelectItem value="SUSPENDED">Ditangguhkan</SelectItem>
-                      <SelectItem value="INACTIVE">Tidak Aktif</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <AdminFilter
+                    value={filterStatus}
+                    onValueChange={(value) => {
+                      setFilterStatus(value);
+                      setPagination(prev => ({ ...prev, page: 1 }));
+                    }}
+                    options={[
+                      { label: "Semua Status", value: "all" },
+                      { label: "Aktif", value: "ACTIVE" },
+                      { label: "Ditangguhkan", value: "SUSPENDED" },
+                      { label: "Tidak Aktif", value: "INACTIVE" },
+                    ]}
+                    placeholder="Status"
+                  />
 
-                  <Select value={filterRole} onValueChange={(value) => {
-                    setFilterRole(value);
-                    setPagination(prev => ({ ...prev, page: 1 }));
-                  }}>
-                    <SelectTrigger className="w-full md:w-[160px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                      <Shield className="h-4 w-4 mr-2 text-gray-400" />
-                      <SelectValue placeholder="Role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Semua Role</SelectItem>
-                      <SelectItem value="STUDENT">Siswa</SelectItem>
-                      <SelectItem value="MENTOR">Mentor</SelectItem>
-                      <SelectItem value="ADMIN">Admin</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <AdminFilter
+                    value={filterRole}
+                    onValueChange={(value) => {
+                      setFilterRole(value);
+                      setPagination(prev => ({ ...prev, page: 1 }));
+                    }}
+                    options={[
+                      { label: "Semua Role", value: "all" },
+                      { label: "Siswa", value: "STUDENT" },
+                      { label: "Mentor", value: "MENTOR" },
+                      { label: "Admin", value: "ADMIN" },
+                    ]}
+                    placeholder="Role"
+                  />
                 </div>
               </div>
 
