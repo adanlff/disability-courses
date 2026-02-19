@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { hashPassword, generateTokens, generateRandomToken } from '@/lib/auth';
+import { hashPassword, generateTokens } from '@/lib/auth';
 import { registerSchema } from '@/lib/validation';
 import { UserRole } from '@prisma/client';
 import { sendVerificationEmail } from '@/services/email.service';
+
+// Generate 6-digit OTP
+function generateOTP(): string {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -55,26 +60,25 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Create verification token
-    const verificationToken = generateRandomToken();
-    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+    // Create 6-digit OTP with 5 minute expiry
+    const otp = generateOTP();
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
 
     await prisma.verificationToken.create({
       data: {
         user_id: user.id,
-        token: verificationToken,
+        token: otp,
         type: 'EMAIL_VERIFICATION',
         expires_at: expiresAt,
       },
     });
 
-    // Send verification email
+    // Send OTP verification email
     try {
-      await sendVerificationEmail(user.email, user.full_name, verificationToken);
-      console.log(`✅ Verification email sent to ${user.email}`);
+      await sendVerificationEmail(user.email, user.full_name, otp);
+      console.log(`✅ Verification OTP sent to ${user.email}`);
     } catch (emailError) {
-      console.error('❌ Failed to send verification email:', emailError);
-      // Don't fail registration if email fails, just log it
+      console.error('❌ Failed to send verification OTP email:', emailError);
     }
 
     // Generate tokens

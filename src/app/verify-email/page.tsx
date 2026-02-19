@@ -1,669 +1,270 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { VerifyEmailPage as VerifyEmailComponent, Testimonial } from "@/components/auth/verify-email";
-import SweetAlert, { AlertType } from "@/components/ui/sweet-alert";
+import Link from "next/link";
+import { Mail, CheckCircle, Loader2, RotateCcw, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 function VerifyEmailContent() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isResending, setIsResending] = useState(false);
-  const [verificationStatus, setVerificationStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const [errorMessage, setErrorMessage] = useState("");
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertConfig, setAlertConfig] = useState<{
-    type: AlertType;
-    title: string;
-    message: string;
-  }>({
-    type: "error",
-    title: "",
-    message: "",
-  });
-  const [countdown, setCountdown] = useState(0);
-  const [showEmailForm, setShowEmailForm] = useState(false);
-  const [emailInput, setEmailInput] = useState("");
-  const [isChangingEmail, setIsChangingEmail] = useState(false);
-  
   const router = useRouter();
   const searchParams = useSearchParams();
   const emailFromParams = searchParams.get("email") || "";
-  const tokenFromParams = searchParams.get("token") || "";
-  const [autoVerifying, setAutoVerifying] = useState(false);
 
-  // Auto-verify when token is present in URL
-  useEffect(() => {
-    const autoVerify = async () => {
-      if (tokenFromParams && !autoVerifying && verificationStatus === 'idle') {
-        setAutoVerifying(true);
-        setIsLoading(true);
-        
-        try {
-          const response = await fetch("/api/auth/verify-email", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ token: tokenFromParams }),
-          });
+  const [email, setEmail] = useState(emailFromParams);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [step, setStep] = useState<"input" | "success">("input");
+  const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [countdown, setCountdown] = useState(emailFromParams ? 5 * 60 : 0);
+  const [showEmailChange, setShowEmailChange] = useState(!emailFromParams);
 
-          const data = await response.json();
-
-          if (!response.ok) {
-            // Handle specific error messages
-            if (data.error === "Token tidak valid") {
-              setErrorMessage("Token verifikasi tidak valid. Pastikan token yang dimasukkan benar dan belum kadaluarsa.");
-              setVerificationStatus('error');
-              return;
-            }
-            
-            if (data.error === "Token sudah kadaluarsa") {
-              setErrorMessage("Token sudah kadaluarsa. Silakan minta token verifikasi baru.");
-              setVerificationStatus('error');
-              return;
-            }
-
-            if (data.error === "Token sudah digunakan") {
-              setErrorMessage("Email Anda sudah terverifikasi. Silakan login ke akun Anda.");
-              setVerificationStatus('error');
-              // Redirect to login after showing message
-              setTimeout(() => {
-                router.push("/login");
-              }, 2000);
-              return;
-            }
-
-            if (data.error === "Email tidak ditemukan") {
-              setErrorMessage("Email tidak ditemukan. Pastikan email yang Anda masukkan benar.");
-              setVerificationStatus('error');
-              return;
-            }
-
-            throw new Error(data.error || "Terjadi kesalahan pada server");
-          }
-
-          // Verification successful
-          setVerificationStatus('success');
-          
-          // Clear email from localStorage
-          localStorage.removeItem("verification_email");
-          
-          // Show success alert
-          showSweetAlert(
-            "success", 
-            "Verifikasi Berhasil!", 
-            "Email Anda telah berhasil diverifikasi. Anda akan diarahkan ke halaman login."
-          );
-
-          // Redirect to login page after delay
-          setTimeout(() => {
-            router.push("/login");
-          }, 3000);
-        } catch (error) {
-          console.error("Verifikasi otomatis gagal:", error);
-          setErrorMessage(
-            error instanceof Error
-              ? error.message
-              : "Terjadi kesalahan pada server, coba lagi nanti."
-          );
-          setVerificationStatus('error');
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    autoVerify();
-  }, [tokenFromParams, autoVerifying, verificationStatus, router]);
-
-  // Initialize email from params or local storage
-  useEffect(() => {
-    const savedEmail = localStorage.getItem("verification_email");
-    if (emailFromParams) {
-      setEmailInput(emailFromParams);
-      localStorage.setItem("verification_email", emailFromParams);
-    } else if (savedEmail) {
-      setEmailInput(savedEmail);
-    } else if (!tokenFromParams) {
-      // Only show email form if there's no token in URL
-      setShowEmailForm(true);
-    }
-  }, [emailFromParams, tokenFromParams]);
-
-  // Sample testimonials data
-  const sampleTestimonials: Testimonial[] = [
-    {
-      avatarSrc: "https://randomuser.me/api/portraits/women/57.jpg",
-      name: "Sarah Chen",
-      handle: "@sarahdigital",
-      text: "Verifikasi email berjalan lancar! Token mudah ditemukan dan dimasukkan.",
-    },
-    {
-      avatarSrc: "https://randomuser.me/api/portraits/men/64.jpg",
-      name: "Marcus Johnson",
-      handle: "@marcustech",
-      text: "Sistem verifikasi yang aman dengan token panjang. Sangat aman dan mudah digunakan!",
-    },
-    {
-      avatarSrc: "https://randomuser.me/api/portraits/men/32.jpg",
-      name: "David Martinez",
-      handle: "@davidcreates",
-      text: "Email verifikasi dengan token yang jelas. Proses copy-paste sangat mudah!",
-    },
-  ];
+  const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   // Countdown timer
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-    
-    if (countdown > 0) {
-      timer = setInterval(() => {
-        setCountdown((prev) => prev - 1);
-      }, 1000);
-    }
-    
-    return () => {
-      if (timer) clearInterval(timer);
-    };
+    if (countdown <= 0) return;
+    const timer = setTimeout(() => setCountdown((c) => c - 1), 1000);
+    return () => clearTimeout(timer);
   }, [countdown]);
 
-  const showSweetAlert = (type: AlertType, title: string, message: string) => {
-    setAlertConfig({ type, title, message });
-    setShowAlert(true);
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60).toString().padStart(2, "0");
+    const s = (seconds % 60).toString().padStart(2, "0");
+    return `${m}:${s}`;
   };
 
-  const handleVerify = async (token: string) => {
-    if (!emailInput.trim()) {
-      setErrorMessage("Email tidak ditemukan. Silakan masukkan email Anda terlebih dahulu.");
-      setVerificationStatus('error');
+  // Handle OTP digit input
+  const handleOtpChange = (index: number, value: string) => {
+    if (!/^\d*$/.test(value)) return;
+    const newOtp = [...otp];
+    newOtp[index] = value.slice(-1);
+    setOtp(newOtp);
+    if (value && index < 5) {
+      otpRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleOtpKeyDown = (index: number, e: React.KeyboardEvent) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      otpRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handleOtpPaste = (e: React.ClipboardEvent) => {
+    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    if (pasted.length === 6) {
+      setOtp(pasted.split(""));
+      otpRefs.current[5]?.focus();
+    }
+  };
+
+  // Submit OTP verification
+  const handleVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const otpCode = otp.join("");
+    if (otpCode.length !== 6) {
+      setError("Masukkan 6 digit kode OTP");
       return;
     }
-
-    setIsLoading(true);
-    setErrorMessage("");
-    setVerificationStatus('idle');
-
+    if (!email) {
+      setError("Email harus diisi");
+      return;
+    }
+    setLoading(true);
+    setError(null);
     try {
-      const response = await fetch("/api/auth/verify-email", {
+      const res = await fetch("/api/auth/verify-email", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp: otpCode }),
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        // Handle specific error messages
-        if (data.error === "Token tidak valid") {
-          setErrorMessage("Token verifikasi tidak valid. Pastikan token yang dimasukkan benar dan belum kadaluarsa.");
-          setVerificationStatus('error');
-          return;
-        }
-        
-        if (data.error === "Token sudah kadaluarsa") {
-          setErrorMessage("Token sudah kadaluarsa. Silakan minta token verifikasi baru.");
-          setVerificationStatus('error');
-          return;
-        }
-
-        if (data.error === "Token sudah digunakan") {
-          setErrorMessage("Email Anda sudah terverifikasi. Silakan login ke akun Anda.");
-          setVerificationStatus('error');
-          return;
-        }
-
-        if (data.error === "Email tidak ditemukan") {
-          setErrorMessage("Email tidak ditemukan. Pastikan email yang Anda masukkan benar.");
-          setVerificationStatus('error');
-          return;
-        }
-
-        throw new Error(data.error || "Terjadi kesalahan pada server");
-      }
-
-      // Verification successful
-      setVerificationStatus('success');
-      
-      // Clear email from localStorage
-      localStorage.removeItem("verification_email");
-      
-      // Show success alert
-      showSweetAlert(
-        "success", 
-        "Verifikasi Berhasil!", 
-        "Email Anda telah berhasil diverifikasi. Anda akan diarahkan ke halaman login."
-      );
-
-      // Redirect to login page after delay
-      setTimeout(() => {
-        router.push("/login");
-      }, 3000);
-    } catch (error) {
-      console.error("Verifikasi gagal:", error);
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "Terjadi kesalahan pada server, coba lagi nanti."
-      );
-      setVerificationStatus('error');
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Verifikasi gagal");
+      setStep("success");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Terjadi kesalahan");
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  const handleResend = async (email: string) => {
-    if (!email.trim()) {
-      showSweetAlert(
-        "error",
-        "Email Kosong",
-        "Silakan masukkan email Anda terlebih dahulu."
-      );
+  // Resend OTP
+  const handleResend = async () => {
+    if (!email) {
+      setError("Masukkan email terlebih dahulu");
       return;
     }
-
-    setIsResending(true);
-    setCountdown(60); // Set countdown 60 detik
-
+    setResending(true);
+    setError(null);
+    setOtp(["", "", "", "", "", ""]);
     try {
-      const response = await fetch("/api/auth/resend-verification", {
+      const res = await fetch("/api/auth/resend-verification", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        // Check if user is already verified
-        if (data.error === "Email sudah terverifikasi") {
-          showSweetAlert(
-            "info",
-            "Email Sudah Terverifikasi",
-            "Email Anda sudah terverifikasi. Silakan login ke akun Anda."
-          );
-          setTimeout(() => {
-            router.push("/login");
-          }, 2000);
-          return;
-        }
-
-        // Check if email is not registered
-        if (response.status === 404) {
-          showSweetAlert(
-            "info",
-            "Email Tidak Ditemukan",
-            "Email ini tidak terdaftar dalam sistem kami. Pastikan email yang Anda masukkan benar."
-          );
-          return;
-        }
-
-        throw new Error(data.error || "Terjadi kesalahan pada server");
-      }
-
-      // Save email to localStorage
-      localStorage.setItem("verification_email", email);
-      setShowEmailForm(false);
-      setIsChangingEmail(false);
-
-      // Show success alert
-      showSweetAlert(
-        "success", 
-        "Email Terkirim!", 
-        "Token verifikasi baru telah dikirim ke email Anda. Periksa folder spam jika tidak menemukannya."
-      );
-    } catch (error) {
-      console.error("Gagal mengirim ulang:", error);
-      showSweetAlert(
-        "error",
-        "Gagal Mengirim Ulang",
-        error instanceof Error
-          ? error.message
-          : "Terjadi kesalahan pada server, coba lagi nanti."
-      );
-      setCountdown(0); // Reset countdown jika gagal
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Gagal mengirim ulang kode");
+      setCountdown(5 * 60);
+      setShowEmailChange(false);
+      setTimeout(() => otpRefs.current[0]?.focus(), 100);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Terjadi kesalahan");
     } finally {
-      setIsResending(false);
+      setResending(false);
     }
   };
 
-  const handleEmailSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!emailInput.trim()) {
-      showSweetAlert(
-        "error",
-        "Email Kosong",
-        "Silakan masukkan email Anda terlebih dahulu."
-      );
-      return;
-    }
-
-    await handleResend(emailInput);
-  };
-
-  const handleChangeEmail = () => {
-    setIsChangingEmail(true);
-    setShowEmailForm(true);
-  };
-
-  const handleCancelChangeEmail = () => {
-    setIsChangingEmail(false);
-    setShowEmailForm(false);
-  };
-
-  const handleClearEmail = () => {
-    setEmailInput("");
-    localStorage.removeItem("verification_email");
-    setShowEmailForm(true);
-    setIsChangingEmail(false);
-  };
-
-  // Render loading state when auto-verifying from URL token
-  if (autoVerifying && tokenFromParams) {
-    return (
-      <div>
-        <SweetAlert
-          type={alertConfig.type}
-          title={alertConfig.title}
-          message={alertConfig.message}
-          show={showAlert}
-          onClose={() => setShowAlert(false)}
-          duration={alertConfig.type === "success" ? 3000 : 5000}
-          showCloseButton={true}
-        />
-
-        <div className="h-screen flex flex-col md:flex-row font-geist bg-background overflow-hidden">
-          <section className="flex-1 flex items-center justify-center p-0 md:p-8">
-            <div className="w-full max-w-md mx-auto p-6 text-center">
-              <div className="flex flex-col items-center gap-6">
-                {verificationStatus === 'idle' && (
-                  <>
-                    <div className="w-20 h-20 border-4 border-violet-500 border-t-transparent rounded-full animate-spin"></div>
-                    <div>
-                      <h1 className="text-3xl md:text-4xl font-semibold mb-2">Memverifikasi Email...</h1>
-                      <p className="text-muted-foreground">Mohon tunggu, kami sedang memverifikasi email Anda.</p>
-                    </div>
-                  </>
-                )}
-                
-                {verificationStatus === 'success' && (
-                  <>
-                    <div className="w-20 h-20 rounded-full bg-green-500/10 flex items-center justify-center">
-                      <svg className="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h1 className="text-3xl md:text-4xl font-semibold mb-2 text-green-500">Verifikasi Berhasil!</h1>
-                      <p className="text-muted-foreground">Email Anda telah diverifikasi. Mengalihkan ke halaman login...</p>
-                    </div>
-                  </>
-                )}
-                
-                {verificationStatus === 'error' && (
-                  <>
-                    <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center">
-                      <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h1 className="text-3xl md:text-4xl font-semibold mb-2 text-red-500">Verifikasi Gagal</h1>
-                      <p className="text-muted-foreground">{errorMessage || "Terjadi kesalahan saat memverifikasi email."}</p>
-                    </div>
-                    <div className="flex gap-3 mt-4">
-                      <a
-                        href="/login"
-                        className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
-                      >
-                        Ke Halaman Login
-                      </a>
-                      <button
-                        onClick={() => {
-                          setAutoVerifying(false);
-                          setShowEmailForm(true);
-                          setVerificationStatus('idle');
-                        }}
-                        className="px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-600 font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                      >
-                        Minta Token Baru
-                      </button>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-          </section>
-
-          {/* Right column: hero image */}
-          <section className="hidden md:block flex-1 relative p-4">
-            <div
-              className="absolute inset-4 rounded-lg bg-cover bg-center"
-              style={{ 
-                backgroundImage: `url(https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?w=2160&q=80)` 
-              }}
-            ></div>
-          </section>
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#EFF6FF] to-[#DBEAFE] dark:from-gray-900 dark:to-gray-800 p-4">
+      <div className="w-full max-w-md">
+        <div className="mb-6 text-center">
+          <Link href="/login" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-[#005EB8] transition-colors">
+            <ArrowLeft className="h-4 w-4" />
+            Kembali ke Login
+          </Link>
         </div>
-      </div>
-    );
-  }
 
-  // Render email input form
-  if (showEmailForm) {
-    return (
-      <div>
-        <SweetAlert
-          type={alertConfig.type}
-          title={alertConfig.title}
-          message={alertConfig.message}
-          show={showAlert}
-          onClose={() => setShowAlert(false)}
-          duration={alertConfig.type === "success" ? 3000 : 5000}
-          showCloseButton={true}
-        />
-
-        <div className="h-screen flex flex-col md:flex-row font-geist bg-background overflow-hidden">
-          {/* Left column: email input form */}
-          <section className="flex-1 flex items-center justify-center p-0 md:p-8">
-            <div className="w-full max-w-md mx-auto p-6">
-              <div className="flex flex-col gap-6">
-                {/* Header */}
-                <div className="flex flex-col gap-2">
-                  <h1 className="text-4xl md:text-5xl font-semibold leading-tight">
-                    {isChangingEmail ? "Ganti Email" : "Verifikasi Email"}
-                  </h1>
-                  <p className="text-muted-foreground">
-                    {isChangingEmail 
-                      ? "Masukkan email baru untuk menerima token verifikasi" 
-                      : "Masukkan email Anda untuk menerima token verifikasi"}
-                  </p>
-                </div>
-
-                {/* Current Email Info (if changing) */}
-                {isChangingEmail && localStorage.getItem("verification_email") && (
-                  <div className="animate-element animate-delay-250 rounded-lg border border-yellow-500/20 bg-yellow-500/5 text-card-foreground shadow-sm p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-yellow-600 dark:text-yellow-400">
-                          Email sebelumnya:
-                        </p>
-                        <p className="text-sm text-muted-foreground truncate">
-                          {localStorage.getItem("verification_email")}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Email Input Form */}
-                <form onSubmit={handleEmailSubmit} className="space-y-5">
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground block mb-3">
-                      Email {isChangingEmail ? "Baru" : "Anda"}
-                    </label>
-                    <div className="rounded-lg border bg-card/5 text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700 backdrop-blur-sm focus-within:border-violet-400/70 focus-within:bg-violet-500/10">
-                      <input
-                        type="email"
-                        placeholder="contoh@email.com"
-                        className="w-full bg-transparent text-sm p-4 rounded-lg focus:outline-none"
-                        value={emailInput}
-                        onChange={(e) => setEmailInput(e.target.value)}
-                        required
-                        autoFocus={isChangingEmail}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-3">
-                    <button
-                      type="submit"
-                      disabled={isResending}
-                      className="flex-1 rounded-lg bg-primary py-4 font-medium text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                    >
-                      {isResending ? (
-                        <>
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          Mengirim Token...
-                        </>
-                      ) : isChangingEmail ? (
-                        "Kirim ke Email Baru"
-                      ) : (
-                        "Kirim Token Verifikasi"
-                      )}
-                    </button>
-
-                    {isChangingEmail && (
-                      <button
-                        type="button"
-                        onClick={handleCancelChangeEmail}
-                        className="flex-1 rounded-lg border border-gray-300 dark:border-gray-600 py-4 font-medium text-foreground hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                      >
-                        Batal
-                      </button>
-                    )}
-                  </div>
-                </form>
-
-                {/* Additional Info */}
-                <div className="pt-4 border-t border-border">
-                  <p className="text-center text-sm text-muted-foreground">
-                    {isChangingEmail ? (
-                      <>
-                        Kembali ke{" "}
-                        <button
-                          type="button"
-                          onClick={handleCancelChangeEmail}
-                          className="text-violet-400 hover:underline transition-colors"
-                        >
-                          verifikasi token
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        Sudah memiliki token?{" "}
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (emailInput.trim()) {
-                              setShowEmailForm(false);
-                            } else {
-                              showSweetAlert(
-                                "info",
-                                "Masukkan Email",
-                                "Silakan masukkan email Anda terlebih dahulu untuk melanjutkan."
-                              );
-                            }
-                          }}
-                          className="text-violet-400 hover:underline transition-colors"
-                        >
-                          Masukkan token verifikasi
-                        </button>
-                      </>
-                    )}
-                  </p>
-                  <p className="text-center text-xs text-muted-foreground mt-2">
-                    Token akan dikirim ke email Anda dan berlaku selama 24 jam
-                  </p>
-                </div>
-              </div>
+        <Card className="shadow-xl border-gray-200 dark:border-gray-700">
+          <CardHeader className="text-center pb-4">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#005EB8]/10">
+              {step === "success" ? (
+                <CheckCircle className="h-8 w-8 text-green-600" />
+              ) : (
+                <Mail className="h-8 w-8 text-[#005EB8]" />
+              )}
             </div>
-          </section>
+            <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">
+              {step === "success" ? "Email Terverifikasi!" : "Verifikasi Email"}
+            </CardTitle>
+            <CardDescription className="text-gray-500 dark:text-gray-400">
+              {step === "success"
+                ? "Akun Anda sudah aktif dan siap digunakan"
+                : email
+                ? <span>Masukkan kode OTP yang dikirim ke <strong className="text-gray-700 dark:text-gray-300">{email}</strong></span>
+                : "Masukkan email dan kode OTP untuk verifikasi"}
+            </CardDescription>
+          </CardHeader>
 
-          {/* Right column: hero image + testimonials */}
-          <section className="hidden md:block flex-1 relative p-4">
-            <div
-              className="animate-slide-right animate-delay-300 absolute inset-4 rounded-lg bg-cover bg-center"
-              style={{ 
-                backgroundImage: `url(https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?w=2160&q=80)` 
-              }}
-            ></div>
-            {sampleTestimonials.length > 0 && (
-              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4 px-8 w-full justify-center">
-                <div className="rounded-lg border bg-card/40 text-card-foreground shadow-sm transition-all duration-300 backdrop-blur-xl border-white/10 w-64">
-                  <div className="p-5">
-                    <div className="flex items-start gap-3">
-                      <img
-                        src={sampleTestimonials[0].avatarSrc}
-                        className="h-10 w-10 object-cover rounded-lg"
-                        alt="avatar"
-                      />
-                      <div className="text-sm leading-snug">
-                        <p className="flex items-center gap-1 font-medium">
-                          {sampleTestimonials[0].name}
-                        </p>
-                        <p className="text-muted-foreground">
-                          {sampleTestimonials[0].handle}
-                        </p>
-                        <p className="mt-1 text-foreground/80">
-                          {sampleTestimonials[0].text}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+          <CardContent className="pt-2">
+            {error && (
+              <div className="mb-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-3 text-sm text-red-600 dark:text-red-400">
+                {error}
               </div>
             )}
-          </section>
-        </div>
+
+            {step === "input" && (
+              <form onSubmit={handleVerify} className="space-y-6">
+                {/* Email field - shown if no email from params or user wants to change */}
+                {showEmailChange ? (
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Alamat Email</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="nama@email.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="border-gray-300 dark:border-gray-600 focus:border-[#005EB8]"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handleResend}
+                        disabled={resending || !email}
+                        className="shrink-0 border-[#005EB8] text-[#005EB8] hover:bg-[#005EB8] hover:text-white"
+                      >
+                        {resending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Kirim"}
+                      </Button>
+                    </div>
+                  </div>
+                ) : email ? (
+                  <div className="flex items-center justify-between rounded-lg bg-gray-50 dark:bg-gray-800 px-4 py-2 text-sm">
+                    <span className="text-gray-600 dark:text-gray-400">Email: <span className="font-medium text-gray-900 dark:text-white">{email}</span></span>
+                    <button type="button" onClick={() => setShowEmailChange(true)} className="text-[#005EB8] hover:underline text-xs ml-2">
+                      Ubah
+                    </button>
+                  </div>
+                ) : null}
+
+                {/* OTP Boxes */}
+                <div className="space-y-3">
+                  <Label className="block text-center text-sm">Kode OTP (6 Digit)</Label>
+                  <div className="flex justify-center gap-3" onPaste={handleOtpPaste}>
+                    {otp.map((digit, i) => (
+                      <input
+                        key={i}
+                        ref={(el) => { otpRefs.current[i] = el; }}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
+                        value={digit}
+                        onChange={(e) => handleOtpChange(i, e.target.value)}
+                        onKeyDown={(e) => handleOtpKeyDown(i, e)}
+                        autoFocus={i === 0 && !!email && !showEmailChange}
+                        className="h-14 w-12 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-center text-2xl font-bold text-gray-900 dark:text-white shadow-sm focus:border-[#005EB8] focus:outline-none focus:ring-2 focus:ring-[#005EB8]/20 transition-all"
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Timer */}
+                {email && !showEmailChange && (
+                  <div className="text-center">
+                    {countdown > 0 ? (
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        Kode berlaku: <span className="font-bold text-[#005EB8] tabular-nums">{formatTime(countdown)}</span>
+                      </p>
+                    ) : (
+                      <p className="text-sm text-red-500 dark:text-red-400 font-medium">Kode sudah kadaluarsa</p>
+                    )}
+                  </div>
+                )}
+
+                <Button
+                  type="submit"
+                  className="w-full bg-[#005EB8] hover:bg-[#004A93]"
+                  disabled={loading || otp.join("").length !== 6 || !email}
+                >
+                  {loading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Memverifikasi...</> : "Verifikasi Email"}
+                </Button>
+
+                {/* Resend */}
+                {email && !showEmailChange && (
+                  <div className="text-center">
+                    <button
+                      type="button"
+                      onClick={handleResend}
+                      disabled={resending || countdown > 0}
+                      className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#005EB8] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" />
+                      {resending ? "Mengirim..." : countdown > 0 ? `Kirim ulang dalam ${formatTime(countdown)}` : "Kirim ulang kode"}
+                    </button>
+                  </div>
+                )}
+              </form>
+            )}
+
+            {step === "success" && (
+              <div className="space-y-4 text-center">
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  Email <strong>{email}</strong> berhasil diverifikasi. Akun Anda kini aktif.
+                </p>
+                <Button onClick={() => router.push("/login")} className="w-full bg-[#005EB8] hover:bg-[#004A93]">
+                  Login Sekarang
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
-    );
-  }
-
-  // Render token verification form if email is provided
-  return (
-    <div>
-      {/* Sweet Alert Component */}
-      <SweetAlert
-        type={alertConfig.type}
-        title={alertConfig.title}
-        message={alertConfig.message}
-        show={showAlert}
-        onClose={() => setShowAlert(false)}
-        duration={alertConfig.type === "success" ? 3000 : 5000}
-        showCloseButton={true}
-      />
-
-      <VerifyEmailComponent
-        title="Verifikasi Email"
-        description="Masukkan token verifikasi yang telah dikirim ke email Anda"
-        heroImageSrc="https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?w=2160&q=80"
-        testimonials={sampleTestimonials}
-        email={emailInput}
-        onVerify={handleVerify}
-        onResend={handleResend}
-        onChangeEmail={handleChangeEmail}
-        onClearEmail={handleClearEmail}
-        isLoading={isLoading}
-        isResending={isResending}
-        verificationStatus={verificationStatus}
-        errorMessage={errorMessage}
-        countdown={countdown}
-      />
     </div>
   );
 }
@@ -671,11 +272,8 @@ function VerifyEmailContent() {
 export default function VerifyEmailPage() {
   return (
     <Suspense fallback={
-      <div className="h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Memuat halaman verifikasi...</p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-[#005EB8]" />
       </div>
     }>
       <VerifyEmailContent />

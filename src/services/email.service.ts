@@ -390,37 +390,30 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
 export async function sendVerificationEmail(
   email: string,
   name: string,
-  token: string
+  otp: string
 ) {
-  const verifyUrl = `${BASE_URL}/verify-email?token=${token}`;
-  const expires = new Date(Date.now() + 24 * 60 * 60 * 1000).toLocaleString('id-ID', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
-  
   const content = `
     <h2 class="email-title">Halo, ${name}!</h2>
     
     <div class="email-body">
-      <p>Terima kasih telah mendaftar di E-Learning Platform. Silakan verifikasi alamat email Anda untuk mengaktifkan akun dan mulai menjelajahi berbagai kursus berkualitas.</p>
+      <p>Terima kasih telah mendaftar di E-Learning Platform. Gunakan kode OTP berikut untuk memverifikasi alamat email Anda.</p>
       
       <div style="text-align: center; margin: 32px 0;">
-        <a href="${verifyUrl}" class="email-button email-button-success">
-          Verifikasi Email Sekarang
-        </a>
+        <p style="font-size: 14px; color: #6b7280; margin-bottom: 12px;">Kode Verifikasi Email Anda</p>
+        <div style="display: inline-block; background: linear-gradient(135deg, #005EB8 0%, #003f7a 100%); border-radius: 16px; padding: 4px;">
+          <div style="background: white; border-radius: 12px; padding: 24px 40px;">
+            <span style="font-size: 48px; font-weight: 800; letter-spacing: 12px; color: #005EB8; font-family: 'Courier New', monospace;">${otp}</span>
+          </div>
+        </div>
+        <p style="font-size: 13px; color: #9ca3af; margin-top: 12px;">Kode berlaku selama <strong>5 menit</strong></p>
       </div>
-      
-      <p>Atau salin dan tempel link berikut ke browser Anda:</p>
-      <div class="email-code">${verifyUrl}</div>
       
       <div class="email-warning-box">
-        <p><strong>Perhatian:</strong> Link verifikasi ini akan kadaluarsa pada <strong>${expires}</strong>.</p>
-        <p>Jika Anda tidak melakukan verifikasi dalam waktu 24 jam, Anda perlu meminta link verifikasi baru.</p>
+        <p><strong>Perhatian:</strong> Kode OTP ini akan <strong>kadaluarsa dalam 5 menit</strong>.</p>
+        <p>Jangan bagikan kode ini kepada siapapun. Tim kami tidak akan pernah meminta kode OTP Anda.</p>
       </div>
+
+      <p style="font-size: 14px; color: #6b7280;">Jika Anda tidak mendaftar di platform kami, abaikan email ini.</p>
     </div>
   `;
 
@@ -428,7 +421,7 @@ export async function sendVerificationEmail(
 
   return sendEmail({
     to: email,
-    subject: 'Verifikasi Email Anda - E-Learning Platform',
+    subject: `${otp} - Kode Verifikasi Email E-Learning Platform`,
     html,
   });
 }
@@ -436,51 +429,46 @@ export async function sendVerificationEmail(
 export async function sendPasswordResetEmail(
   email: string,
   name: string,
-  token: string
+  otp: string
 ) {
-  const resetUrl = `${BASE_URL}/reset-password?token=${token}`;
-  const expires = new Date(Date.now() + 60 * 60 * 1000).toLocaleString('id-ID', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
-  
   const content = `
-    <h2 class="email-title">Permintaan Reset Password</h2>
+    <h2 class="email-title">Reset Password</h2>
     
     <div class="email-body">
-      <p>Halo <strong>${name}</strong>, kami menerima permintaan untuk mengatur ulang password akun Anda di E-Learning Platform.</p>
+      <p>Halo, <strong>${name}</strong>! Kami menerima permintaan reset password untuk akun Anda.</p>
+      <p>Gunakan kode OTP berikut untuk mereset password Anda:</p>
       
       <div style="text-align: center; margin: 32px 0;">
-        <a href="${resetUrl}" class="email-button email-button-warning">
-          Reset Password Sekarang
-        </a>
+        <p style="font-size: 14px; color: #6b7280; margin-bottom: 12px;">Kode Reset Password Anda</p>
+        <div style="display: inline-block; background: linear-gradient(135deg, #005EB8 0%, #003f7a 100%); border-radius: 16px; padding: 4px;">
+          <div style="background: white; border-radius: 12px; padding: 24px 40px;">
+            <span style="font-size: 48px; font-weight: 800; letter-spacing: 12px; color: #005EB8; font-family: 'Courier New', monospace;">${otp}</span>
+          </div>
+        </div>
+        <p style="font-size: 13px; color: #9ca3af; margin-top: 12px;">Kode berlaku selama <strong>5 menit</strong></p>
       </div>
       
-      <p>Atau salin dan tempel link berikut ke browser Anda:</p>
-      <div class="email-code">${resetUrl}</div>
+      <div class="email-danger-box">
+        <p><strong>Penting:</strong> Kode OTP ini akan <strong>kadaluarsa dalam 5 menit</strong>.</p>
+        <p>Jangan bagikan kode ini kepada siapapun, termasuk tim support kami.</p>
+      </div>
       
       <div class="email-warning-box">
-        <p><strong>Penting:</strong> Link reset password ini akan kadaluarsa pada <strong>${expires}</strong> (1 jam dari sekarang).</p>
-      </div>
-      
-      <div class="email-info-box">
-        <p><strong>Keamanan Akun:</strong> Jika Anda tidak meminta perubahan password, abaikan email ini dan pertimbangkan untuk mengamankan akun Anda. Keamanan akun Anda adalah prioritas utama kami.</p>
+        <p>Jika Anda tidak meminta reset password, abaikan email ini. Akun Anda aman dan tidak ada yang mengakses akun Anda.</p>
       </div>
     </div>
   `;
 
-  const html = createEmailTemplate(content, 'Reset Password - E-Learning Platform', 'Jika Anda tidak meminta reset password, abaikan email ini.');
+  const html = createEmailTemplate(content, 'Reset Password - E-Learning Platform', 'Demi keamanan akun Anda, jangan bagikan kode ini kepada siapapun.');
 
   return sendEmail({
     to: email,
-    subject: 'Permintaan Reset Password - E-Learning Platform',
+    subject: `${otp} - Kode Reset Password E-Learning Platform`,
     html,
   });
 }
+
+
 
 export async function sendWelcomeEmail(email: string, name: string) {
   const content = `

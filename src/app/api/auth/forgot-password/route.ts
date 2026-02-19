@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { generateRandomToken } from '@/lib/auth';
 import { forgotPasswordSchema } from '@/lib/validation';
 import { sendPasswordResetEmail } from '@/services/email.service';
+
+// Generate 6-digit OTP
+function generateOTP(): string {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    
+
     // Validate input
     const result = forgotPasswordSchema.safeParse(body);
     if (!result.success) {
@@ -28,7 +32,7 @@ export async function POST(request: NextRequest) {
     // Always return success to prevent email enumeration
     if (!user) {
       return NextResponse.json({
-        message: 'Jika email terdaftar, Anda akan menerima email untuk reset password',
+        message: 'Jika email terdaftar, Anda akan menerima kode OTP untuk reset password',
       });
     }
 
@@ -40,14 +44,14 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Create new token
-    const token = generateRandomToken();
-    const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+    // Create new 6-digit OTP with 5 minute expiry
+    const otp = generateOTP();
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
 
     await prisma.verificationToken.create({
       data: {
         user_id: user.id,
-        token,
+        token: otp,
         type: 'PASSWORD_RESET',
         expires_at: expiresAt,
       },
@@ -66,17 +70,17 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Send password reset email
+    // Send OTP email
     try {
-      await sendPasswordResetEmail(user.email, user.full_name, token);
-      console.log(`✅ Password reset email sent to ${user.email}`);
+      await sendPasswordResetEmail(user.email, user.full_name, otp);
+      console.log(`✅ Password reset OTP sent to ${user.email}`);
     } catch (emailError) {
-      console.error('❌ Failed to send password reset email:', emailError);
-      // Don't fail the request if email fails
+      console.error('❌ Failed to send password reset OTP email:', emailError);
     }
 
     return NextResponse.json({
-      message: 'Jika email terdaftar, Anda akan menerima email untuk reset password',
+      message: 'Kode OTP telah dikirim ke email Anda',
+      email: user.email,
     });
   } catch (error) {
     console.error('Forgot password error:', error);

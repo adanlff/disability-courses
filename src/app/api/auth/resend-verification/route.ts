@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { generateRandomToken } from '@/lib/auth';
 import { resendVerificationSchema } from '@/lib/validation';
 import { sendVerificationEmail } from '@/services/email.service';
+
+// Generate 6-digit OTP
+function generateOTP(): string {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    
+
     // Validate input
     const result = resendVerificationSchema.safeParse(body);
     if (!result.success) {
@@ -28,15 +32,13 @@ export async function POST(request: NextRequest) {
     // Always return success to prevent email enumeration
     if (!user) {
       return NextResponse.json({
-        message: 'Jika email terdaftar dan belum diverifikasi, Anda akan menerima email verifikasi',
+        message: 'Jika email terdaftar dan belum diverifikasi, Anda akan menerima kode OTP',
       });
     }
 
     // Check if already verified
     if (user.email_verified) {
-      return NextResponse.json({
-        message: 'Email sudah diverifikasi',
-      });
+      return NextResponse.json({ message: 'Email sudah diverifikasi' });
     }
 
     // Delete existing verification tokens for this user
@@ -47,14 +49,14 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Create new token
-    const token = generateRandomToken();
-    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+    // Create new 6-digit OTP with 5 minute expiry
+    const otp = generateOTP();
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
 
     await prisma.verificationToken.create({
       data: {
         user_id: user.id,
-        token,
+        token: otp,
         type: 'EMAIL_VERIFICATION',
         expires_at: expiresAt,
       },
@@ -72,17 +74,17 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Send verification email
+    // Send OTP verification email
     try {
-      await sendVerificationEmail(user.email, user.full_name, token);
-      console.log(`✅ Resend verification email sent to ${user.email}`);
+      await sendVerificationEmail(user.email, user.full_name, otp);
+      console.log(`✅ Resend verification OTP sent to ${user.email}`);
     } catch (emailError) {
-      console.error('❌ Failed to send resend verification email:', emailError);
-      // Don't fail the request if email fails
+      console.error('❌ Failed to send resend verification OTP email:', emailError);
     }
 
     return NextResponse.json({
-      message: 'Jika email terdaftar dan belum diverifikasi, Anda akan menerima email verifikasi',
+      message: 'Kode OTP baru telah dikirim ke email Anda',
+      email: user.email,
     });
   } catch (error) {
     console.error('Resend verification error:', error);
