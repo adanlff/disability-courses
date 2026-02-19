@@ -369,57 +369,49 @@ export default function AdminMentors() {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700">
-              <CardContent className="p-5">
+            <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700 hover:shadow-md">
+              <CardContent className="p-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-xl bg-[#005EB8]/10">
-                    <Users className="h-6 w-6 text-[#005EB8]" />
-                  </div>
+                  <Users className="h-6 w-6 text-[#005EB8]" />
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Total Mentor</p>
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Mentor</p>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700">
-              <CardContent className="p-5">
+            <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700 hover:shadow-md">
+              <CardContent className="p-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-xl bg-[#008A00]/10">
-                    <UserCheck className="h-6 w-6 text-[#008A00]" />
-                  </div>
+                  <UserCheck className="h-6 w-6 text-[#008A00]" />
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Terverifikasi</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.approved}</p>
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Terverifikasi</p>
+                    <p className="text-2xl font-bold text-[#008A00]">{stats.approved}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700">
-              <CardContent className="p-5">
+            <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700 hover:shadow-md">
+              <CardContent className="p-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-xl bg-[#F4B400]/10">
-                    <Clock className="h-6 w-6 text-[#F4B400]" />
-                  </div>
+                  <Clock className="h-6 w-6 text-[#F4B400]" />
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Menunggu</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.pending}</p>
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Menunggu</p>
+                    <p className="text-2xl font-bold text-[#F4B400]">{stats.pending}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700">
-              <CardContent className="p-5">
+            <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700 hover:shadow-md">
+              <CardContent className="p-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-xl bg-[#D93025]/10">
-                    <UserX className="h-6 w-6 text-[#D93025]" />
-                  </div>
+                  <UserX className="h-6 w-6 text-[#D93025]" />
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Ditolak</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.rejected}</p>
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Ditolak</p>
+                    <p className="text-2xl font-bold text-[#D93025]">{stats.rejected}</p>
                   </div>
                 </div>
               </CardContent>
@@ -428,7 +420,7 @@ export default function AdminMentors() {
 
           {/* Mentors Table Card */}
           <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700 overflow-hidden">
-            <CardHeader className="pb-4 border-b border-gray-200 dark:border-gray-700">
+            <CardHeader className="pb-3 border-b">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
                   <CardTitle className="text-xl font-bold flex items-center gap-2 text-gray-900 dark:text-white">

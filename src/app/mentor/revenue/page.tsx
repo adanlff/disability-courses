@@ -28,6 +28,7 @@ import { Users } from "lucide-react";
 import { BookOpen } from "lucide-react";
 import MentorLayout from "@/components/mentor/mentor-layout";
 import ProtectedRoute from "@/components/auth/protected-route";
+import { MentorFilter } from '@/components/mentor/mentor-filter';
 
 interface RevenueData {
   total_revenue: number;
@@ -154,19 +155,13 @@ export default function RevenuePage() {
               </p>
             </div>
             <div className="flex justify-center md:justify-end">
-              <Select value={selectedYear} onValueChange={setSelectedYear}>
-                <SelectTrigger className="w-40 border-gray-300 focus:border-[#005EB8] focus:ring-[#005EB8]">
-                  <Calendar className="h-4 w-4 mr-2 text-gray-400" />
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {availableYears.map((year) => (
-                    <SelectItem key={year} value={year}>
-                      Tahun {year}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <MentorFilter 
+                value={selectedYear} 
+                onValueChange={setSelectedYear}
+                options={availableYears.map(year => ({ label: `Tahun ${year}`, value: year }))}
+                placeholder="Pilih Tahun"
+                className="md:w-[180px]"
+              />
             </div>
           </div>
 

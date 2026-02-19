@@ -36,7 +36,8 @@ import {
 } from "lucide-react";
 import MentorLayout from "@/components/mentor/mentor-layout";
 import ProtectedRoute from "@/components/auth/protected-route";
-import Pagination from '@/components/ui/pagination'; // Import komponen pagination
+import Pagination from '@/components/ui/pagination';
+import { MentorFilter } from '@/components/mentor/mentor-filter';
 
 interface Student {
   id: string;
@@ -317,22 +318,16 @@ export default function StudentsEnrolledPage() {
                       className="pl-10 h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600"
                     />
                   </div>
-                  <Select value={courseFilter} onValueChange={setCourseFilter}>
-                    <SelectTrigger className="w-full md:w-[200px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                      <Filter className="h-4 w-4 mr-2 text-gray-400" />
-                      <SelectValue placeholder="Filter kursus" />
-                    </SelectTrigger>
-                    <SelectContent className="max-h-[300px] w-full">
-                      <SelectItem value="all" className="truncate">
-                        Semua Kursus
-                      </SelectItem>
-                      {courses.map((course) => (
-                        <SelectItem key={course.id} value={course.id} className="truncate">
-                          {course.title}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <MentorFilter 
+                    value={courseFilter} 
+                    onValueChange={setCourseFilter}
+                    options={[
+                      { label: "Semua Kursus", value: "all" },
+                      ...courses.map(course => ({ label: course.title, value: course.id }))
+                    ]}
+                    placeholder="Filter Kursus"
+                    className="md:w-[250px]"
+                  />
                 </div>
               </div>
 

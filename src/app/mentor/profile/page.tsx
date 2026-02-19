@@ -459,7 +459,7 @@ export default function MentorProfilePage() {
                   Isi semua field yang diperlukan dengan lengkap
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="p-6 space-y-6">
                 {/* Headline */}
                 <div className="space-y-2">
                   <Label htmlFor="headline" className="text-gray-900 dark:text-white">Headline / Profesi *</Label>
@@ -839,14 +839,14 @@ export default function MentorProfilePage() {
             <div className="grid md:grid-cols-2 gap-6">
               {/* Professional Info */}
               <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-md border-gray-200 dark:border-gray-700">
-                <CardHeader>
+                <CardHeader className="pb-3 border-b">
                   <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white text-xl font-bold">
                     <Briefcase className="h-5 w-5 text-[#005EB8]" />
                     Detail Profesional
                   </CardTitle>
                   <CardDescription>Informasi profesional Anda</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="p-6 space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="headline" className="text-gray-900 dark:text-gray-100">Headline</Label>
                     <Input 
@@ -928,14 +928,14 @@ export default function MentorProfilePage() {
               </Card>
               {/* Links & Contact */}
               <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-md border-gray-200 dark:border-gray-700">
-                <CardHeader>
+                <CardHeader className="pb-3 border-b">
                   <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white text-xl font-bold">
                     <LinkIcon className="h-5 w-5 text-[#005EB8]" />
                     Link & Kontak
                   </CardTitle>
                   <CardDescription>Informasi kontak dan sosial media</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="p-6 space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="phone" className="text-gray-900 dark:text-gray-100">Telepon</Label>
                     <Input 
@@ -994,14 +994,14 @@ export default function MentorProfilePage() {
           {profile && !isEditing && (
             <div className="grid md:grid-cols-2 gap-6">
               <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-md border-gray-200 dark:border-gray-700">
-                <CardHeader>
+                <CardHeader className="pb-3 border-b">
                   <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white text-xl font-bold">
                     <Briefcase className="h-5 w-5 text-[#005EB8]" />
                     Detail Profesional
                   </CardTitle>
                   <CardDescription>Informasi profesional Anda</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-0">
+                <CardContent className="p-6 space-y-0">
                   <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
                     <span className="text-gray-600 dark:text-gray-400">Pengalaman</span>
                     <span className="font-medium text-gray-900 dark:text-white">{profile.experience} tahun</span>
@@ -1025,14 +1025,14 @@ export default function MentorProfilePage() {
                 </CardContent>
               </Card>
               <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-md border-gray-200 dark:border-gray-700">
-                <CardHeader>
+                <CardHeader className="pb-3 border-b">
                   <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white text-xl font-bold">
                     <LinkIcon className="h-5 w-5 text-[#005EB8]" />
                     Link & Kontak
                   </CardTitle>
                   <CardDescription>Informasi kontak dan sosial media</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-0">
+                <CardContent className="p-6 space-y-0">
                   <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
                     <span className="text-gray-600 dark:text-gray-400">Telepon</span>
                     <span className="font-medium text-gray-900 dark:text-white">{profile.user?.phone || "-"}</span>
@@ -1104,14 +1104,14 @@ export default function MentorProfilePage() {
           {/* Account Info Card for mentors */}
           {profile && (
             <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-md border-gray-200 dark:border-gray-700">
-              <CardHeader>
+              <CardHeader className="pb-3 border-b">
                 <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
                   <Shield className="h-5 w-5 text-[#005EB8]" />
                   Informasi Akun
                 </CardTitle>
                 <CardDescription>Detail akun Anda (tidak dapat diubah)</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <Card className="rounded-lg border bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
                     <CardContent className="p-4">

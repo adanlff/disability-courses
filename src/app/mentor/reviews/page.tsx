@@ -38,6 +38,7 @@ import {
 import Image from "next/image";
 import MentorLayout from "@/components/mentor/mentor-layout";
 import ProtectedRoute from "@/components/auth/protected-route";
+import { MentorFilter } from '@/components/mentor/mentor-filter';
 
 interface Review {
   id: string;
@@ -305,40 +306,30 @@ export default function MentorReviewsPage() {
                       className="pl-10 h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600"
                     />
                   </div>
-                  <Select value={courseFilter} onValueChange={setCourseFilter}>
-                    <SelectTrigger className="w-full md:w-[180px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                      <Filter className="h-4 w-4 mr-2 text-gray-400" />
-                      <SelectValue placeholder="Kursus" />
-                    </SelectTrigger>
-                    <SelectContent className="max-h-[300px]">
-                      <SelectItem value="all" className="truncate">
-                        Semua Kursus
-                      </SelectItem>
-                      {courses.map((course) => (
-                        <SelectItem key={course.id} value={course.id} className="truncate">
-                          {course.title}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select value={ratingFilter} onValueChange={setRatingFilter}>
-                    <SelectTrigger className="w-full md:w-[150px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                      <Star className="h-4 w-4 mr-2 text-gray-400" />
-                      <SelectValue placeholder="Rating" />
-                    </SelectTrigger>
-                    <SelectContent className="w-full">
-                      <SelectItem value="all" className="truncate">
-                        Semua Rating
-                      </SelectItem>
-                      {[5, 4, 3, 2, 1].map((r) => (
-                        <SelectItem key={r} value={r.toString()} className="truncate">
-                          <div className="flex items-center gap-2">
-                            <RatingStars rating={r} size="sm" />
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <MentorFilter 
+                    value={courseFilter} 
+                    onValueChange={setCourseFilter}
+                    options={[
+                      { label: "Semua Kursus", value: "all" },
+                      ...courses.map(course => ({ label: course.title, value: course.id }))
+                    ]}
+                    placeholder="Filter Kursus"
+                    className="md:w-[250px]"
+                  />
+                  <MentorFilter 
+                    value={ratingFilter} 
+                    onValueChange={setRatingFilter}
+                    options={[
+                      { label: "Semua Rating", value: "all" },
+                      { label: "5 Bintang", value: "5" },
+                      { label: "4 Bintang", value: "4" },
+                      { label: "3 Bintang", value: "3" },
+                      { label: "2 Bintang", value: "2" },
+                      { label: "1 Bintang", value: "1" },
+                    ]}
+                    placeholder="Rating"
+                    className="md:w-[180px]"
+                  />
                 </div>
               </div>
 

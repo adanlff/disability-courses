@@ -34,7 +34,8 @@ import {
 } from '@/components/ui/select';
 import { CoursesModal } from '@/components/modal/courses-modal';
 import SweetAlert, { AlertType } from '@/components/ui/sweet-alert';
-import Pagination from '@/components/ui/pagination'; // Import komponen pagination
+import Pagination from '@/components/ui/pagination';
+import { MentorFilter } from '@/components/mentor/mentor-filter';
 
 type CourseStatus = 'DRAFT' | 'PENDING_REVIEW' | 'PUBLISHED' | 'ARCHIVED';
 
@@ -567,34 +568,32 @@ export default function MentorCourses() {
                   />
                 </div>
                 <div className="flex gap-2">
-                  <Select value={filterStatus} onValueChange={(value) => {
-                    setFilterStatus(value);
-                  }}>
-                    <SelectTrigger className="w-full md:w-[180px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                      <Filter className="h-4 w-4 mr-2 text-gray-400" />
-                      <SelectValue placeholder="Status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Semua Status</SelectItem>
-                      <SelectItem value="draft">Draft</SelectItem>
-                      <SelectItem value="pending_review">Menunggu Review</SelectItem>
-                      <SelectItem value="published">Published</SelectItem>
-                      <SelectItem value="archived">Archived</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <MentorFilter 
+                    value={filterStatus} 
+                    onValueChange={setFilterStatus}
+                    options={[
+                      { label: "Semua Status", value: "all" },
+                      { label: "Draft", value: "draft" },
+                      { label: "Menunggu Review", value: "pending_review" },
+                      { label: "Published", value: "published" },
+                      { label: "Archived", value: "archived" },
+                    ]}
+                    placeholder="Status"
+                    className="md:w-[200px]"
+                  />
 
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-full md:w-[180px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                      <ArrowUpDown className="h-4 w-4 mr-2 text-gray-400" />
-                      <SelectValue placeholder="Urutkan" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="recent">Terbaru</SelectItem>
-                      <SelectItem value="students">Siswa Terbanyak</SelectItem>
-                      <SelectItem value="rating">Rating Tertinggi</SelectItem>
-                      <SelectItem value="revenue">Pendapatan Tertinggi</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <MentorFilter 
+                    value={sortBy} 
+                    onValueChange={setSortBy}
+                    options={[
+                      { label: "Terbaru", value: "recent" },
+                      { label: "Siswa Terbanyak", value: "students" },
+                      { label: "Rating Tertinggi", value: "rating" },
+                      { label: "Pendapatan Tertinggi", value: "revenue" },
+                    ]}
+                    placeholder="Urutkan"
+                    className="md:w-[200px]"
+                  />
                 </div>
               </div>
             </CardContent>

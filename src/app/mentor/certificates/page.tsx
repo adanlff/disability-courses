@@ -48,6 +48,7 @@ import {
 } from "@/components/ui/tabs";
 import Link from "next/link";
 import { CertificateTemplateModal } from "@/components/certificates/certificate-modal";
+import { MentorFilter } from '@/components/mentor/mentor-filter';
 
 interface Certificate {
   id: string;
@@ -417,29 +418,28 @@ export default function MentorCertificatesPage() {
                           className="pl-10 h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600" 
                         />
                       </div>
-                      <Select value={filterCourse} onValueChange={setFilterCourse}>
-                        <SelectTrigger className="w-full md:w-[200px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                          <BookOpen className="h-4 w-4 mr-2 text-gray-400" />
-                          <SelectValue placeholder="Kursus" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">Semua Kursus</SelectItem>
-                          {courses.map(course => (
-                            <SelectItem key={course.id} value={course.id}>{course.title}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <Select value={filterStatus} onValueChange={setFilterStatus}>
-                        <SelectTrigger className="w-full md:w-[160px] h-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600">
-                          <SelectValue placeholder="Status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">Semua Status</SelectItem>
-                          <SelectItem value="ISSUED">Terbit</SelectItem>
-                          <SelectItem value="PENDING">Pending</SelectItem>
-                          <SelectItem value="REVOKED">Dicabut</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <MentorFilter 
+                        value={filterCourse} 
+                        onValueChange={setFilterCourse}
+                        options={[
+                          { label: "Semua Kursus", value: "all" },
+                          ...courses.map(course => ({ label: course.title, value: course.id }))
+                        ]}
+                        placeholder="Kursus"
+                        className="md:w-[250px]"
+                      />
+                      <MentorFilter 
+                        value={filterStatus} 
+                        onValueChange={setFilterStatus}
+                        options={[
+                          { label: "Semua Status", value: "all" },
+                          { label: "Terbit", value: "ISSUED" },
+                          { label: "Pending", value: "PENDING" },
+                          { label: "Dicabut", value: "REVOKED" },
+                        ]}
+                        placeholder="Status"
+                        className="md:w-[180px]"
+                      />
                     </div>
                   </div>
 
