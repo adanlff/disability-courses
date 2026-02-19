@@ -691,10 +691,6 @@ export default function AdminCertificatesPage() {
                       <FileText className="h-16 w-16 text-gray-300 dark:text-gray-700 mx-auto mb-4" />
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Belum Ada Template</h3>
                       <p className="text-gray-500 dark:text-gray-400 mb-4">Buat template sertifikat pertama Anda</p>
-                      <Button onClick={openCreateModal} className="bg-[#005EB8] hover:bg-[#004A93] text-white">
-                        <Plus className="h-4 w-4 mr-2" />
-                        Buat Template
-                      </Button>
                     </div>
                   ) : (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">

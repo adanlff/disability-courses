@@ -828,10 +828,6 @@ export default function AdminCategories() {
                   <p className="text-gray-600 dark:text-gray-400 mb-6">
                     {searchTerm ? "Coba ubah kata kunci pencarian Anda" : "Mulai dengan menambahkan kategori pertama"}
                   </p>
-                  <Button onClick={openCreateDialog} className="bg-[#005EB8] hover:bg-[#004A93] text-white">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Tambah Kategori
-                  </Button>
                 </div>
               )}
             </CardContent>
