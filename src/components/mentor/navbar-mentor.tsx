@@ -276,14 +276,14 @@ export default function NavbarMentor({ toggleSidebar }: NavbarMentorProps) {
               <DropdownMenu>
                 <DropdownMenuTrigger
                   disabled={isLoggingOut}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-[#005EB8] focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:opacity-50"
+                  className="flex items-center gap-2 p-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[#005EB8] focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:opacity-50"
                   aria-label="User menu"
                 >
                   <UserCircle className="h-8 w-8 text-[#005EB8]" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"
-                  className="w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg"
+                  className="w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md transition-all duration-300"
                 >
                   {/* User info in dropdown */}
                   {userData && (

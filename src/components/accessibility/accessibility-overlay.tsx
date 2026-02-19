@@ -552,7 +552,7 @@ const AccessibilityOverlay: React.FC = () => {
             <button
               onClick={() => setIsWidgetMinimized(true)}
               className="
-                absolute -top-2 -right-2 p-1 rounded-full bg-gray-700 hover:bg-gray-800 shadow-md transition-all duration-200
+                absolute top-0 right-0 p-1 rounded-full bg-gray-700 hover:bg-gray-800 shadow-md transition-all duration-200
                 focus:outline-none focus:ring-2 focus:ring-gray-400 z-10
               "
               aria-label="Sembunyikan widget"
