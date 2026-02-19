@@ -463,6 +463,7 @@ export default function AdminMentors() {
                       { label: "Ditolak", value: "REJECTED" },
                     ]}
                     placeholder="Status"
+                    className="md:w-[180px]"
                   />
                 </div>
               </div>

@@ -544,6 +544,7 @@ export default function AdminSettings() {
                       { label: "User", value: "user" },
                     ]}
                     placeholder="Kategori"
+                    className="md:w-[180px]"
                   />
                 </div>
               </div>

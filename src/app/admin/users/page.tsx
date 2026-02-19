@@ -496,6 +496,7 @@ export default function AdminUsers() {
                       { label: "Tidak Aktif", value: "INACTIVE" },
                     ]}
                     placeholder="Status"
+                    className="md:w-[180px]"
                   />
 
                   <AdminFilter
@@ -511,6 +512,7 @@ export default function AdminUsers() {
                       { label: "Admin", value: "ADMIN" },
                     ]}
                     placeholder="Role"
+                    className="md:w-[180px]"
                   />
                 </div>
               </div>

@@ -372,7 +372,7 @@ export default function AdminTransactions() {
                     { label: "Kadaluarsa", value: "EXPIRED" },
                   ]}
                   placeholder="Status"
-                  className="md:w-[160px]"
+                  className="md:w-[180px]"
                 />
               </div>
             </div>

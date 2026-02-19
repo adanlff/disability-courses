@@ -570,6 +570,7 @@ export default function AdminCertificatesPage() {
                           { label: "Dicabut", value: "REVOKED" },
                         ]}
                         placeholder="Status"
+                        className="md:w-[180px]"
                       />
                     </div>
                   </div>

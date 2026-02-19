@@ -667,7 +667,7 @@ export default function AdminCourses() {
                       { label: "Archived", value: "ARCHIVED" },
                     ]}
                     placeholder="Status"
-                    className="md:w-[200px]"
+                    className="md:w-[210px]"
                   />
 
                     <AdminFilter
@@ -681,7 +681,7 @@ export default function AdminCourses() {
                         ...categories.map((cat) => ({ label: cat!, value: cat! })),
                       ]}
                       placeholder="Kategori"
-                      className="md:w-[200px]"
+                      className="md:w-[210px]"
                     />
                 </div>
               </div>
