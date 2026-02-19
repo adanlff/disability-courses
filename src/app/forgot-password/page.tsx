@@ -11,6 +11,41 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 
 type Step = "email" | "otp" | "newPassword" | "success";
 
+const GlassInputWrapper = ({ children }: { children: React.ReactNode }) => (
+  <Card className="rounded-lg border bg-card/5 text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700 backdrop-blur-sm focus-within:border-violet-400/70 focus-within:bg-violet-500/10">
+    <CardContent className="p-0">
+      {children}
+    </CardContent>
+  </Card>
+);
+
+const TestimonialCard = ({
+  testimonial,
+  delay,
+}: {
+  testimonial: { avatarSrc: string; name: string; handle: string; text: string };
+  delay: string;
+}) => (
+  <Card
+    className={`rounded-lg border bg-card/40 text-card-foreground shadow-sm transition-all duration-300 border-white/10 backdrop-blur-xl animate-testimonial ${delay} w-64`}
+  >
+    <CardContent className="p-5">
+      <div className="flex items-start gap-3">
+        <img
+          src={testimonial.avatarSrc}
+          className="h-10 w-10 object-cover rounded-lg"
+          alt="avatar"
+        />
+        <div className="text-sm leading-snug">
+          <p className="flex items-center gap-1 font-medium">{testimonial.name}</p>
+          <p className="text-muted-foreground">{testimonial.handle}</p>
+          <p className="mt-1 text-foreground/80">{testimonial.text}</p>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+);
+
 function ForgotPasswordContent() {
   const router = useRouter();
   const [step, setStep] = useState<Step>("email");
@@ -25,6 +60,27 @@ function ForgotPasswordContent() {
   const [countdown, setCountdown] = useState(0);
 
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  const sampleTestimonials = [
+    {
+      avatarSrc: "https://randomuser.me/api/portraits/women/57.jpg",
+      name: "Sarah Chen",
+      handle: "@sarahdigital",
+      text: "Platform yang luar biasa! Pengalaman pengguna sangat lancar dan fiturnya tepat sesuai yang saya butuhkan.",
+    },
+    {
+      avatarSrc: "https://randomuser.me/api/portraits/men/64.jpg",
+      name: "Marcus Johnson",
+      handle: "@marcustech",
+      text: "Layanan ini telah mengubah cara saya bekerja. Desain bersih, fitur powerful, dan dukungan yang excellent.",
+    },
+    {
+      avatarSrc: "https://randomuser.me/api/portraits/men/32.jpg",
+      name: "David Martinez",
+      handle: "@davidcreates",
+      text: "Saya sudah mencoba banyak platform, tapi yang ini benar-benar menonjol. Intuitif, reliable, dan sangat membantu produktivitas.",
+    },
+  ];
 
   // Countdown timer
   useEffect(() => {
@@ -155,79 +211,77 @@ function ForgotPasswordContent() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#EFF6FF] to-[#DBEAFE] dark:from-gray-900 dark:to-gray-800 p-4">
-      <div className="w-full max-w-md">
-        {/* Logo / Back link */}
-        <div className="mb-6 text-center">
-          <Link href="/login" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-[#005EB8] transition-colors">
-            <ArrowLeft className="h-4 w-4" />
-            Kembali ke Login
-          </Link>
-        </div>
-
-        <Card className="shadow-xl border-gray-200 dark:border-gray-700">
-          <CardHeader className="text-center pb-4">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#005EB8]/10">
-              {step === "success" ? (
-                <CheckCircle className="h-8 w-8 text-green-600" />
-              ) : step === "newPassword" ? (
-                <ShieldCheck className="h-8 w-8 text-[#005EB8]" />
-              ) : step === "otp" ? (
-                <KeyRound className="h-8 w-8 text-[#005EB8]" />
-              ) : (
-                <Mail className="h-8 w-8 text-[#005EB8]" />
-              )}
-            </div>
-
-            <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">
+    <div className="h-[100dvh] flex flex-col md:flex-row font-geist w-[100dvw] overflow-hidden">
+      {/* Left column: form */}
+      <section className="flex-1 flex items-center justify-center p-8 overflow-y-auto">
+        <div className="w-full max-w-md">
+          <div className="flex flex-col gap-6">
+            <h1 className="animate-element animate-delay-100 text-4xl md:text-5xl font-semibold leading-tight">
               {step === "email" && "Lupa Password?"}
               {step === "otp" && "Masukkan Kode OTP"}
               {step === "newPassword" && "Buat Password Baru"}
               {step === "success" && "Password Berhasil Direset!"}
-            </CardTitle>
-
-            <CardDescription className="text-gray-500 dark:text-gray-400">
+            </h1>
+            <p className="animate-element animate-delay-200 text-muted-foreground">
               {step === "email" && "Masukkan email Anda untuk menerima kode OTP"}
               {step === "otp" && (
                 <span>Kode 6 digit telah dikirim ke <strong className="text-gray-700 dark:text-gray-300">{email}</strong></span>
               )}
               {step === "newPassword" && "Buat password baru yang kuat untuk akun Anda"}
               {step === "success" && "Silakan login dengan password baru Anda"}
-            </CardDescription>
-          </CardHeader>
+            </p>
 
-          <CardContent className="pt-2">
+            {/* Error Message */}
             {error && (
-              <div className="mb-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-3 text-sm text-red-600 dark:text-red-400">
-                {error}
-              </div>
+              <Card className="rounded-lg border bg-red-500/10 text-card-foreground shadow-sm border-red-500/20 animate-element animate-delay-250">
+                <CardContent className="p-4">
+                  <p className="text-red-500 text-sm text-center font-medium">
+                    {error}
+                  </p>
+                </CardContent>
+              </Card>
             )}
 
             {/* STEP 1: Email */}
             {step === "email" && (
-              <form onSubmit={handleEmailSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Alamat Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="nama@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="border-gray-300 dark:border-gray-600 focus:border-[#005EB8]"
-                  />
+              <form onSubmit={handleEmailSubmit} className="space-y-5">
+                <div className="animate-element animate-delay-300">
+                  <label className="text-sm font-medium text-muted-foreground">
+                    Alamat Email
+                  </label>
+                  <GlassInputWrapper>
+                    <input
+                      id="email"
+                      type="email"
+                      placeholder="nama@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="w-full bg-transparent text-sm p-4 rounded-lg focus:outline-none"
+                    />
+                  </GlassInputWrapper>
                 </div>
-                <Button type="submit" className="w-full bg-[#005EB8] hover:bg-[#004A93]" disabled={loading}>
-                  {loading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Mengirim...</> : "Kirim Kode OTP"}
-                </Button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="animate-element animate-delay-400 w-full rounded-lg bg-primary py-4 font-medium text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Mengirim...
+                    </>
+                  ) : (
+                    "Kirim Kode OTP"
+                  )}
+                </button>
               </form>
             )}
 
             {/* STEP 2: OTP */}
             {step === "otp" && (
               <form onSubmit={handleOtpSubmit} className="space-y-6">
-                <div className="flex justify-center gap-3" onPaste={handleOtpPaste}>
+                <div className="animate-element animate-delay-300 flex justify-center gap-3" onPaste={handleOtpPaste}>
                   {otp.map((digit, i) => (
                     <input
                       key={i}
@@ -239,104 +293,185 @@ function ForgotPasswordContent() {
                       onChange={(e) => handleOtpChange(i, e.target.value)}
                       onKeyDown={(e) => handleOtpKeyDown(i, e)}
                       autoFocus={i === 0}
-                      className="h-14 w-12 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-center text-2xl font-bold text-gray-900 dark:text-white shadow-sm focus:border-[#005EB8] focus:outline-none focus:ring-2 focus:ring-[#005EB8]/20 transition-all"
+                      className="h-14 w-12 rounded-xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-center text-2xl font-bold text-gray-900 dark:text-white shadow-sm focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-400/20 transition-all"
                     />
                   ))}
                 </div>
 
                 {/* Timer */}
-                <div className="text-center">
+                <div className="animate-element animate-delay-400 text-center">
                   {countdown > 0 ? (
                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Kode berlaku: <span className="font-bold text-[#005EB8] tabular-nums">{formatTime(countdown)}</span>
+                      Kode berlaku: <span className="font-bold text-violet-500 tabular-nums">{formatTime(countdown)}</span>
                     </p>
                   ) : (
                     <p className="text-sm text-red-500 dark:text-red-400 font-medium">Kode sudah kadaluarsa</p>
                   )}
                 </div>
 
-                <Button
-                  type="submit"
-                  className="w-full bg-[#005EB8] hover:bg-[#004A93]"
-                  disabled={loading || otp.join("").length !== 6}
-                >
-                  Verifikasi Kode
-                </Button>
-
-                <div className="text-center">
+                <div className="space-y-3">
                   <button
-                    type="button"
-                    onClick={handleResend}
-                    disabled={loading || countdown > 0}
-                    className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#005EB8] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    type="submit"
+                    disabled={loading || otp.join("").length !== 6}
+                    className="animate-element animate-delay-500 w-full rounded-lg bg-primary py-4 font-medium text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <RotateCcw className="h-3.5 w-3.5" />
-                    {countdown > 0 ? `Kirim ulang dalam ${formatTime(countdown)}` : "Kirim ulang kode"}
+                    Verifikasi Kode
                   </button>
+
+                  <div className="animate-element animate-delay-600 text-center">
+                    <button
+                      type="button"
+                      onClick={handleResend}
+                      disabled={loading || countdown > 0}
+                      className="inline-flex items-center gap-1 text-sm text-violet-400 hover:text-violet-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors font-medium"
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" />
+                      {countdown > 0 ? `Kirim ulang dalam ${formatTime(countdown)}` : "Kirim ulang kode"}
+                    </button>
+                  </div>
                 </div>
               </form>
             )}
 
             {/* STEP 3: New Password */}
             {step === "newPassword" && (
-              <form onSubmit={handleResetPassword} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="password">Password Baru</Label>
-                  <div className="relative">
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Minimal 8 karakter"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      className="pr-10 border-gray-300 dark:border-gray-600 focus:border-[#005EB8]"
-                    />
-                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
+              <form onSubmit={handleResetPassword} className="space-y-5">
+                <div className="animate-element animate-delay-300">
+                  <label className="text-sm font-medium text-muted-foreground">
+                    Password Baru
+                  </label>
+                  <GlassInputWrapper>
+                    <div className="relative">
+                      <input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Minimal 8 karakter"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        className="w-full bg-transparent text-sm p-4 pr-12 rounded-lg focus:outline-none"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-3 flex items-center"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="w-5 h-5 text-muted-foreground hover:text-foreground transition-colors" />
+                        ) : (
+                          <Eye className="w-5 h-5 text-muted-foreground hover:text-foreground transition-colors" />
+                        )}
+                      </button>
+                    </div>
+                  </GlassInputWrapper>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Konfirmasi Password</Label>
-                  <div className="relative">
-                    <Input
-                      id="confirmPassword"
-                      type={showConfirm ? "text" : "password"}
-                      placeholder="Ulangi password baru"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      required
-                      className="pr-10 border-gray-300 dark:border-gray-600 focus:border-[#005EB8]"
-                    />
-                    <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                      {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
+                <div className="animate-element animate-delay-400">
+                  <label className="text-sm font-medium text-muted-foreground">
+                    Konfirmasi Password
+                  </label>
+                  <GlassInputWrapper>
+                    <div className="relative">
+                      <input
+                        id="confirmPassword"
+                        type={showConfirm ? "text" : "password"}
+                        placeholder="Ulangi password baru"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                        className="w-full bg-transparent text-sm p-4 pr-12 rounded-lg focus:outline-none"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirm(!showConfirm)}
+                        className="absolute inset-y-0 right-3 flex items-center"
+                      >
+                        {showConfirm ? (
+                          <EyeOff className="w-5 h-5 text-muted-foreground hover:text-foreground transition-colors" />
+                        ) : (
+                          <Eye className="w-5 h-5 text-muted-foreground hover:text-foreground transition-colors" />
+                        )}
+                      </button>
+                    </div>
+                  </GlassInputWrapper>
                   {confirmPassword && password !== confirmPassword && (
-                    <p className="text-xs text-red-500">Password tidak cocok</p>
+                    <p className="text-xs text-red-500 mt-1 ml-1 font-medium">Password tidak cocok</p>
                   )}
                 </div>
-                <Button type="submit" className="w-full bg-[#005EB8] hover:bg-[#004A93]" disabled={loading}>
-                  {loading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Menyimpan...</> : "Simpan Password Baru"}
-                </Button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="animate-element animate-delay-500 w-full rounded-lg bg-primary py-4 font-medium text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Menyimpan...
+                    </>
+                  ) : (
+                    "Simpan Password Baru"
+                  )}
+                </button>
               </form>
             )}
 
             {/* STEP 4: Success */}
             {step === "success" && (
-              <div className="space-y-4 text-center">
-                <p className="text-gray-600 dark:text-gray-400 text-sm">
-                  Password Anda telah berhasil diubah. Silakan login dengan password baru.
+              <div className="space-y-6 text-center animate-element animate-delay-300">
+                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-green-500/10 mb-4 animate-bounce">
+                  <CheckCircle className="h-10 w-10 text-green-600" />
+                </div>
+                <p className="text-muted-foreground">
+                  Password Anda telah berhasil diubah. Silakan login dengan password baru Anda.
                 </p>
-                <Button onClick={() => router.push("/login")} className="w-full bg-[#005EB8] hover:bg-[#004A93]">
+                <button
+                  onClick={() => router.push("/login")}
+                  className="w-full rounded-lg bg-primary py-4 font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+                >
                   Login Sekarang
-                </Button>
+                </button>
               </div>
             )}
-          </CardContent>
-        </Card>
-      </div>
+
+            {step !== "success" && (
+              <p className="animate-element animate-delay-700 text-center text-sm text-muted-foreground">
+                Kembali ke{" "}
+                <Link
+                  href="/login"
+                  className="text-violet-400 hover:underline transition-colors font-medium"
+                >
+                  Halaman Login
+                </Link>
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Right column: hero image + testimonials */}
+      <section className="hidden md:block flex-1 relative p-4">
+        <div
+          className="animate-slide-right animate-delay-300 absolute inset-4 rounded-lg bg-cover bg-center"
+          style={{ backgroundImage: `url(https://images.unsplash.com/photo-1642615835477-d303d7dc9ee9?w=2160&q=80)` }}
+        ></div>
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4 px-8 w-full justify-center">
+          <TestimonialCard
+            testimonial={sampleTestimonials[0]}
+            delay="animate-delay-1000"
+          />
+          <div className="hidden xl:flex">
+            <TestimonialCard
+              testimonial={sampleTestimonials[1]}
+              delay="animate-delay-1200"
+            />
+          </div>
+          <div className="hidden 2xl:flex">
+            <TestimonialCard
+              testimonial={sampleTestimonials[2]}
+              delay="animate-delay-1400"
+            />
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
