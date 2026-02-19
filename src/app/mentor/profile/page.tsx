@@ -459,7 +459,7 @@ export default function MentorProfilePage() {
                   Isi semua field yang diperlukan dengan lengkap
                 </CardDescription>
               </CardHeader>
-              <CardContent className="p-6 space-y-6">
+              <CardContent className="pt-4 space-y-6">
                 {/* Headline */}
                 <div className="space-y-2">
                   <Label htmlFor="headline" className="text-gray-900 dark:text-white">Headline / Profesi *</Label>
@@ -846,7 +846,7 @@ export default function MentorProfilePage() {
                   </CardTitle>
                   <CardDescription>Informasi profesional Anda</CardDescription>
                 </CardHeader>
-                <CardContent className="p-6 space-y-4">
+                <CardContent className="pt-4 space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="headline" className="text-gray-900 dark:text-gray-100">Headline</Label>
                     <Input 
@@ -935,7 +935,7 @@ export default function MentorProfilePage() {
                   </CardTitle>
                   <CardDescription>Informasi kontak dan sosial media</CardDescription>
                 </CardHeader>
-                <CardContent className="p-6 space-y-4">
+                <CardContent className="pt-4 space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="phone" className="text-gray-900 dark:text-gray-100">Telepon</Label>
                     <Input 
@@ -1001,7 +1001,7 @@ export default function MentorProfilePage() {
                   </CardTitle>
                   <CardDescription>Informasi profesional Anda</CardDescription>
                 </CardHeader>
-                <CardContent className="p-6 space-y-0">
+                <CardContent className="space-y-0">
                   <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
                     <span className="text-gray-600 dark:text-gray-400">Pengalaman</span>
                     <span className="font-medium text-gray-900 dark:text-white">{profile.experience} tahun</span>
@@ -1032,7 +1032,7 @@ export default function MentorProfilePage() {
                   </CardTitle>
                   <CardDescription>Informasi kontak dan sosial media</CardDescription>
                 </CardHeader>
-                <CardContent className="p-6 space-y-0">
+                <CardContent className="space-y-0">
                   <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
                     <span className="text-gray-600 dark:text-gray-400">Telepon</span>
                     <span className="font-medium text-gray-900 dark:text-white">{profile.user?.phone || "-"}</span>
