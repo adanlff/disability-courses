@@ -473,85 +473,81 @@ export default function UserProfile() {
                 </CardTitle>
                 <CardDescription>Data diri Anda</CardDescription>
               </CardHeader>
-              <CardContent className="pt-6 space-y-4">
-                {isEditing ? (
-                  // Edit Mode
-                  <>
-                    <div className="space-y-2">
-                      <Label htmlFor="full_name" className="text-gray-900 dark:text-gray-100">Nama Lengkap</Label>
-                      <Input
-                        id="full_name"
-                        name="full_name"
-                        value={formData.full_name}
-                        onChange={handleChange}
-                        placeholder="Nama lengkap Anda"
-                        className="border-gray-300 dark:border-gray-600 focus:border-[#005EB8] focus:ring-[#005EB8] dark:bg-gray-800"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="phone" className="text-gray-900 dark:text-gray-100">Nomor Telepon</Label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        placeholder="08xxxxxxxxxx"
-                        className="border-gray-300 dark:border-gray-600 focus:border-[#005EB8] focus:ring-[#005EB8] dark:bg-gray-800"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="date_of_birth" className="text-gray-900 dark:text-gray-100">Tanggal Lahir</Label>
-                      <Input
-                        id="date_of_birth"
-                        name="date_of_birth"
-                        type="date"
-                        value={formData.date_of_birth}
-                        onChange={handleChange}
-                        className="border-gray-300 dark:border-gray-600 focus:border-[#005EB8] focus:ring-[#005EB8] dark:bg-gray-800"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="disability_type" className="text-gray-900 dark:text-gray-100">Jenis Disabilitas</Label>
-                      <Select value={formData.disability_type} onValueChange={handleSelectChange}>
-                        <SelectTrigger className="border-gray-300 dark:border-gray-600 focus:border-[#005EB8] focus:ring-[#005EB8] dark:bg-gray-800">
-                          <SelectValue placeholder="Pilih jenis disabilitas" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {disabilityTypes.map((type) => (
-                            <SelectItem key={type.value} value={type.value || "none"}>
-                              {type.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </>
-                ) : (
-                  // View Mode - Updated to match mentor card style
-                  <div className="space-y-0">
-                    <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Nama Lengkap</span>
-                      <span className="font-medium text-gray-900 dark:text-white">{profile.full_name}</span>
-                    </div>
-                    <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Nomor Telepon</span>
-                      <span className="font-medium text-gray-900 dark:text-white">{profile.phone || "-"}</span>
-                    </div>
-                    <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Tanggal Lahir</span>
-                      <span className="font-medium text-gray-900 dark:text-white">
-                        {profile.date_of_birth ? formatDate(profile.date_of_birth) : "-"}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-3">
-                      <span className="text-gray-600 dark:text-gray-400">Jenis Disabilitas</span>
-                      <span className="font-medium text-gray-900 dark:text-white">
-                        {disabilityTypes.find((t) => t.value === profile.disability_type)?.label || "Tidak Ada"}
-                      </span>
-                    </div>
+              {isEditing ? (
+                <CardContent className="pt-4 space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="full_name" className="text-gray-900 dark:text-gray-100">Nama Lengkap</Label>
+                    <Input
+                      id="full_name"
+                      name="full_name"
+                      value={formData.full_name}
+                      onChange={handleChange}
+                      placeholder="Nama lengkap Anda"
+                      className="border-gray-300 dark:border-gray-600 focus:border-[#005EB8] focus:ring-[#005EB8] dark:bg-gray-800"
+                    />
                   </div>
-                )}
-              </CardContent>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone" className="text-gray-900 dark:text-gray-100">Nomor Telepon</Label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="08xxxxxxxxxx"
+                      className="border-gray-300 dark:border-gray-600 focus:border-[#005EB8] focus:ring-[#005EB8] dark:bg-gray-800"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="date_of_birth" className="text-gray-900 dark:text-gray-100">Tanggal Lahir</Label>
+                    <Input
+                      id="date_of_birth"
+                      name="date_of_birth"
+                      type="date"
+                      value={formData.date_of_birth}
+                      onChange={handleChange}
+                      className="border-gray-300 dark:border-gray-600 focus:border-[#005EB8] focus:ring-[#005EB8] dark:bg-gray-800"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="disability_type" className="text-gray-900 dark:text-gray-100">Jenis Disabilitas</Label>
+                    <Select value={formData.disability_type} onValueChange={handleSelectChange}>
+                      <SelectTrigger className="border-gray-300 dark:border-gray-600 focus:border-[#005EB8] focus:ring-[#005EB8] dark:bg-gray-800">
+                        <SelectValue placeholder="Pilih jenis disabilitas" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {disabilityTypes.map((type) => (
+                          <SelectItem key={type.value} value={type.value || "none"}>
+                            {type.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </CardContent>
+              ) : (
+                <CardContent className="space-y-0">
+                  <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
+                    <span className="text-gray-600 dark:text-gray-400">Nama Lengkap</span>
+                    <span className="font-medium text-gray-900 dark:text-white">{profile.full_name}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
+                    <span className="text-gray-600 dark:text-gray-400">Nomor Telepon</span>
+                    <span className="font-medium text-gray-900 dark:text-white">{profile.phone || "-"}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
+                    <span className="text-gray-600 dark:text-gray-400">Tanggal Lahir</span>
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      {profile.date_of_birth ? formatDate(profile.date_of_birth) : "-"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center py-3">
+                    <span className="text-gray-600 dark:text-gray-400">Jenis Disabilitas</span>
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      {disabilityTypes.find((t) => t.value === profile.disability_type)?.label || "Tidak Ada"}
+                    </span>
+                  </div>
+                </CardContent>
+              )}
             </Card>
 
             {/* Address & Bio - Updated to match mentor style */}
@@ -563,64 +559,60 @@ export default function UserProfile() {
                 </CardTitle>
                 <CardDescription>Informasi lokasi dan tentang Anda</CardDescription>
               </CardHeader>
-              <CardContent className="pt-6 space-y-4">
-                {isEditing ? (
-                  // Edit Mode
-                  <>
-                    <div className="space-y-2">
-                      <Label htmlFor="city" className="text-gray-900 dark:text-gray-100">Kota</Label>
-                      <Input
-                        id="city"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleChange}
-                        placeholder="Kota tempat tinggal"
-                        className="border-gray-300 dark:border-gray-600 focus:border-[#005EB8] focus:ring-[#005EB8] dark:bg-gray-800"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="address" className="text-gray-900 dark:text-gray-100">Alamat Lengkap</Label>
-                      <Textarea
-                        id="address"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleChange}
-                        placeholder="Alamat lengkap Anda"
-                        rows={3}
-                        className="border-gray-300 dark:border-gray-600 focus:border-[#005EB8] focus:ring-[#005EB8] dark:bg-gray-800 resize-none"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="bio" className="text-gray-900 dark:text-gray-100">Bio</Label>
-                      <Textarea
-                        id="bio"
-                        name="bio"
-                        value={formData.bio}
-                        onChange={handleChange}
-                        placeholder="Ceritakan tentang diri Anda..."
-                        rows={4}
-                        className="border-gray-300 dark:border-gray-600 focus:border-[#005EB8] focus:ring-[#005EB8] dark:bg-gray-800 resize-none"
-                      />
-                    </div>
-                  </>
-                ) : (
-                  // View Mode - Updated to match mentor card style
-                  <div className="space-y-0">
-                    <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Kota</span>
-                      <span className="font-medium text-gray-900 dark:text-white">{profile.city || "-"}</span>
-                    </div>
-                    <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Alamat Lengkap</span>
-                      <span className="font-medium text-gray-900 dark:text-white">{profile.address || "-"}</span>
-                    </div>
-                    <div className="flex justify-between items-center py-3">
-                      <span className="text-gray-600 dark:text-gray-400">Bio</span>
-                      <span className="font-medium text-gray-900 dark:text-white">{profile.bio || "-"}</span>
-                    </div>
+              {isEditing ? (
+                <CardContent className="pt-4 space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="city" className="text-gray-900 dark:text-gray-100">Kota</Label>
+                    <Input
+                      id="city"
+                      name="city"
+                      value={formData.city}
+                      onChange={handleChange}
+                      placeholder="Kota tempat tinggal"
+                      className="border-gray-300 dark:border-gray-600 focus:border-[#005EB8] focus:ring-[#005EB8] dark:bg-gray-800"
+                    />
                   </div>
-                )}
-              </CardContent>
+                  <div className="space-y-2">
+                    <Label htmlFor="address" className="text-gray-900 dark:text-gray-100">Alamat Lengkap</Label>
+                    <Textarea
+                      id="address"
+                      name="address"
+                      value={formData.address}
+                      onChange={handleChange}
+                      placeholder="Alamat lengkap Anda"
+                      rows={3}
+                      className="border-gray-300 dark:border-gray-600 focus:border-[#005EB8] focus:ring-[#005EB8] dark:bg-gray-800 resize-none"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="bio" className="text-gray-900 dark:text-gray-100">Bio</Label>
+                    <Textarea
+                      id="bio"
+                      name="bio"
+                      value={formData.bio}
+                      onChange={handleChange}
+                      placeholder="Ceritakan tentang diri Anda..."
+                      rows={4}
+                      className="border-gray-300 dark:border-gray-600 focus:border-[#005EB8] focus:ring-[#005EB8] dark:bg-gray-800 resize-none"
+                    />
+                  </div>
+                </CardContent>
+              ) : (
+                <CardContent className="space-y-0">
+                  <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
+                    <span className="text-gray-600 dark:text-gray-400">Kota</span>
+                    <span className="font-medium text-gray-900 dark:text-white">{profile.city || "-"}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
+                    <span className="text-gray-600 dark:text-gray-400">Alamat Lengkap</span>
+                    <span className="font-medium text-gray-900 dark:text-white">{profile.address || "-"}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3">
+                    <span className="text-gray-600 dark:text-gray-400">Bio</span>
+                    <span className="font-medium text-gray-900 dark:text-white">{profile.bio || "-"}</span>
+                  </div>
+                </CardContent>
+              )}
             </Card>
           </div>
 
