@@ -318,27 +318,14 @@ export default function UserWishlist() {
                 Kursus yang Anda simpan untuk dibeli nanti
               </p>
             </div>
-            <div className="flex items-center gap-4">
-              <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700">
-                <CardContent className="p-4">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Total:{" "}
-                    <span className="font-bold text-[#005EB8]">{wishlist.length}</span>{" "}
-                    Kursus
-                  </p>
-                </CardContent>
-              </Card>
+            <div className="flex items-center gap-2">
+              <Badge className="bg-[#005EB8] text-white border border-[#005EB8] pointer-events-none text-sm px-3 py-1 mx-auto md:mx-0">
+                {wishlist.length} Kursus di Wishlist
+              </Badge>
               {wishlist.length > 0 && (
-                <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700">
-                  <CardContent className="p-4">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Estimasi:{" "}
-                      <span className="font-bold text-[#008A00]">
-                        {formatCurrency(totalPrice)}
-                      </span>
-                    </p>
-                  </CardContent>
-                </Card>
+                <Badge className="bg-[#008A00] text-white border border-[#008A00] pointer-events-none text-sm px-3 py-1 mx-auto md:mx-0">
+                   Estimasi: {formatCurrency(totalPrice)}
+                </Badge>
               )}
             </div>
           </div>
