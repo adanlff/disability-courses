@@ -311,14 +311,14 @@ export default function AdminReportsPage() {
                   <div className="grid lg:grid-cols-2 gap-6">
                     {/* Revenue Trend */}
                     <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-md border-gray-200 dark:border-gray-700">
-                      <CardHeader>
+                      <CardHeader className="pb-3 border-b">
                         <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white text-xl font-bold">
                           <LineChart className="h-5 w-5 text-[#005EB8]" />
                           Trend Pendapatan
                         </CardTitle>
                         <CardDescription>Perkembangan pendapatan harian</CardDescription>
                       </CardHeader>
-                      <CardContent>
+                      <CardContent className="p-6">
                         {revenueReport.trend.length === 0 ? (
                           <div className="text-center py-8">
                             <BarChart3 className="h-12 w-12 text-gray-300 dark:text-gray-700 mx-auto mb-3" />
@@ -352,43 +352,45 @@ export default function AdminReportsPage() {
 
                     {/* Payment Methods */}
                     <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-md border-gray-200 dark:border-gray-700">
-                      <CardHeader>
+                      <CardHeader className="pb-3 border-b">
                         <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white text-xl font-bold">
                           <CreditCard className="h-5 w-5 text-[#005EB8]" />
                           Metode Pembayaran
                         </CardTitle>
                         <CardDescription>Distribusi berdasarkan metode pembayaran</CardDescription>
                       </CardHeader>
-                      <CardContent>
+                      <CardContent className="p-6">
                         {revenueReport.by_payment_method.length === 0 ? (
                           <div className="text-center py-8">
                             <CreditCard className="h-12 w-12 text-gray-300 dark:text-gray-700 mx-auto mb-3" />
                             <p className="text-gray-500 dark:text-gray-400">Tidak ada data pembayaran</p>
                           </div>
                         ) : (
-                          <div className="space-y-4">
-                            {revenueReport.by_payment_method.map((pm, i) => {
-                              const total = revenueReport.by_payment_method.reduce((s, p) => s + p.amount, 0);
-                              const pct = total > 0 ? (pm.amount / total) * 100 : 0;
-                              return (
-                                <div key={i}>
-                                  <div className="flex justify-between mb-2">
-                                    <span className="text-sm font-medium text-gray-900 dark:text-white">
-                                      {getPaymentMethodLabel(pm.method)}
-                                    </span>
-                                    <span className="text-sm text-gray-600 dark:text-gray-400">{formatCurrency(pm.amount)}</span>
-                                  </div>
-                                  <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                    <div className="h-full bg-[#005EB8] rounded-full" style={{ width: `${pct}%` }} />
-                                  </div>
-                                  <div className="flex justify-between mt-1">
-                                    <span className="text-xs text-gray-500 dark:text-gray-400">{pct.toFixed(1)}%</span>
-                                    <span className="text-xs text-gray-500 dark:text-gray-400">{pm.amount > 0 ? formatShortCurrency(pm.amount) : 'Rp 0'}</span>
-                                  </div>
+                        <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                          {revenueReport.by_payment_method.map((pm, i) => {
+                            const total = revenueReport.by_payment_method.reduce((s, p) => s + p.amount, 0);
+                            const pct = total > 0 ? (pm.amount / total) * 100 : 0;
+                            const colors: Record<string, string> = { 
+                              E_WALLET: "bg-[#005EB8]", 
+                              VIRTUAL_ACCOUNT: "bg-[#D93025]", 
+                              QRIS: "bg-[#F4B400]" 
+                            };
+                            return (
+                              <div key={i} className="py-4 first:pt-0 last:pb-0">
+                                <div className="flex justify-between mb-1">
+                                  <span className="text-sm font-medium text-gray-900 dark:text-white flex items-center gap-2">
+                                    <span className={`w-3 h-3 rounded-full ${colors[pm.method] || "bg-gray-500"}`} />
+                                    {getPaymentMethodLabel(pm.method)}
+                                  </span>
+                                  <span className="text-sm text-gray-500 dark:text-gray-400">{formatCurrency(pm.amount)} ({pct.toFixed(0)}%)</span>
                                 </div>
-                              );
-                            })}
-                          </div>
+                                <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                  <div className={`h-full ${colors[pm.method] || "bg-[#005EB8]"}`} style={{ width: `${pct}%` }} />
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
                         )}
                       </CardContent>
                     </Card>
@@ -508,14 +510,14 @@ export default function AdminReportsPage() {
                   <div className="grid lg:grid-cols-2 gap-6">
                     {/* Registration Trend */}
                     <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-md border-gray-200 dark:border-gray-700">
-                      <CardHeader>
+                      <CardHeader className="pb-3 border-b">
                         <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white text-xl font-bold">
                           <TrendingUpIcon className="h-5 w-5 text-[#005EB8]" />
                           Trend Registrasi
                         </CardTitle>
                         <CardDescription>Pertumbuhan pengguna baru harian</CardDescription>
                       </CardHeader>
-                      <CardContent>
+                      <CardContent className="p-6">
                         {usersReport.registration_trend.length === 0 ? (
                           <div className="text-center py-8">
                             <TrendingUpIcon className="h-12 w-12 text-gray-300 dark:text-gray-700 mx-auto mb-3" />
@@ -549,49 +551,47 @@ export default function AdminReportsPage() {
 
                     {/* Users by Role */}
                     <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-md border-gray-200 dark:border-gray-700">
-                      <CardHeader>
+                      <CardHeader className="pb-3 border-b">
                         <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white text-xl font-bold">
-                          <Filter className="h-5 w-5 text-[#005EB8]" />
+                          <Users className="h-5 w-5 text-[#005EB8]" />
                           Distribusi Role
                         </CardTitle>
                         <CardDescription>Distribusi pengguna berdasarkan role</CardDescription>
                       </CardHeader>
-                      <CardContent>
+                      <CardContent className="p-6">
                         {usersReport.by_role.length === 0 ? (
                           <div className="text-center py-8">
                             <Filter className="h-12 w-12 text-gray-300 dark:text-gray-700 mx-auto mb-3" />
                             <p className="text-gray-500 dark:text-gray-400">Tidak ada data role</p>
                           </div>
                         ) : (
-                          <div className="space-y-4">
-                            {usersReport.by_role.map((role) => {
-                              const total = usersReport.by_role.reduce((s, r) => s + r.count, 0);
-                              const pct = total > 0 ? (role.count / total) * 100 : 0;
-                              const colors: Record<string, string> = { 
-                                ADMIN: "bg-[#D93025]", 
-                                MENTOR: "bg-[#005EB8]", 
-                                STUDENT: "bg-[#008A00]" 
-                              };
-                              return (
-                                <div key={role.role}>
-                                  <div className="flex justify-between mb-2">
-                                    <span className="text-sm font-medium text-gray-900 dark:text-white flex items-center gap-2">
-                                      <span className={`w-3 h-3 rounded-full ${colors[role.role] || "bg-gray-500"}`} />
-                                      {role.role}
-                                    </span>
-                                    <span className="text-sm text-gray-600 dark:text-gray-400">{role.count} user</span>
-                                  </div>
-                                  <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                    <div className={`h-full ${colors[role.role] || "bg-gray-500"} rounded-full`} style={{ width: `${pct}%` }} />
-                                  </div>
-                                  <div className="flex justify-between mt-1">
-                                    <span className="text-xs text-gray-500 dark:text-gray-400">{pct.toFixed(1)}%</span>
-                                    <span className="text-xs text-gray-500 dark:text-gray-400">{role.count} dari {total}</span>
-                                  </div>
+                        <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                          {usersReport.by_role.map((role) => {
+                            const total = usersReport.by_role.reduce((s, r) => s + r.count, 0);
+                            const pct = total > 0 ? (role.count / total) * 100 : 0;
+                            const colors: Record<string, string> = { 
+                              ADMIN: "bg-[#D93025]", 
+                              MENTOR: "bg-[#005EB8]", 
+                              STUDENT: "bg-[#008A00]" 
+                            };
+                            return (
+                              <div key={role.role} className="py-4 first:pt-0 last:pb-0">
+                                <div className="flex justify-between mb-1">
+                                  <span className="text-sm font-medium text-gray-900 dark:text-white flex items-center gap-2">
+                                    <span className={`w-3 h-3 rounded-full ${colors[role.role] || "bg-gray-500"}`} />
+                                    {role.role === "ADMIN" ? "Admin" : 
+                                     role.role === "MENTOR" ? "Mentor" : 
+                                     role.role === "STUDENT" ? "Siswa" : role.role}
+                                  </span>
+                                  <span className="text-sm text-gray-500 dark:text-gray-400">{role.count} ({pct.toFixed(0)}%)</span>
                                 </div>
-                              );
-                            })}
-                          </div>
+                                <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                  <div className={`h-full ${colors[role.role] || "bg-gray-500"}`} style={{ width: `${pct}%` }} />
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
                         )}
                       </CardContent>
                     </Card>
@@ -813,88 +813,88 @@ export default function AdminReportsPage() {
                   <div className="grid lg:grid-cols-2 gap-6">
                     {/* By Category */}
                     <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-md border-gray-200 dark:border-gray-700">
-                      <CardHeader>
+                      <CardHeader className="pb-3 border-b">
                         <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white text-xl font-bold">
                           <Bookmark className="h-5 w-5 text-[#005EB8]" />
                           Per Kategori
                         </CardTitle>
                         <CardDescription>Distribusi kursus berdasarkan kategori</CardDescription>
                       </CardHeader>
-                      <CardContent>
+                      <CardContent className="p-6">
                         {coursesReport.by_category.length === 0 ? (
                           <div className="text-center py-8">
                             <Filter className="h-12 w-12 text-gray-300 dark:text-gray-700 mx-auto mb-3" />
                             <p className="text-gray-500 dark:text-gray-400">Tidak ada data kategori</p>
                           </div>
                         ) : (
-                          <div className="space-y-3">
-                            {coursesReport.by_category.map((cat) => {
-                              const total = coursesReport.by_category.reduce((s, c) => s + c.count, 0);
-                              const pct = total > 0 ? (cat.count / total) * 100 : 0;
-                              return (
-                                <div key={cat.category}>
-                                  <div className="flex justify-between mb-2">
-                                    <span className="text-sm font-medium text-gray-900 dark:text-white">{cat.category}</span>
-                                    <span className="text-sm text-gray-600 dark:text-gray-400">{cat.count} kursus</span>
-                                  </div>
-                                  <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                    <div className="h-full bg-[#005EB8] rounded-full" style={{ width: `${pct}%` }} />
-                                  </div>
-                                  <div className="flex justify-between mt-1">
-                                    <span className="text-xs text-gray-500 dark:text-gray-400">{pct.toFixed(1)}%</span>
-                                    <span className="text-xs text-gray-500 dark:text-gray-400">{cat.count} dari {total}</span>
-                                  </div>
+                        <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                          {coursesReport.by_category.map((cat, i) => {
+                            const total = coursesReport.by_category.reduce((s, c) => s + c.count, 0);
+                            const pct = total > 0 ? (cat.count / total) * 100 : 0;
+                            const colors = ["bg-[#005EB8]", "bg-[#008A00]", "bg-[#F4B400]", "bg-[#D93025]", "bg-purple-500"];
+                            const colorClass = colors[i % colors.length];
+                            return (
+                              <div key={cat.category} className="py-4 first:pt-0 last:pb-0">
+                                <div className="flex justify-between mb-1">
+                                  <span className="text-sm font-medium text-gray-900 dark:text-white flex items-center gap-2">
+                                    <span className={`w-3 h-3 rounded-full ${colorClass}`} />
+                                    {cat.category}
+                                  </span>
+                                  <span className="text-sm text-gray-500 dark:text-gray-400">{cat.count} ({pct.toFixed(0)}%)</span>
                                 </div>
-                              );
-                            })}
-                          </div>
+                                <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                  <div className={`h-full ${colorClass}`} style={{ width: `${pct}%` }} />
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
                         )}
                       </CardContent>
                     </Card>
 
                     {/* By Level */}
                     <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-md border-gray-200 dark:border-gray-700">
-                      <CardHeader>
+                      <CardHeader className="pb-3 border-b">
                         <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white text-xl font-bold">
                           <GraduationCap className="h-5 w-5 text-[#005EB8]" />
                           Per Level
                         </CardTitle>
                         <CardDescription>Distribusi kursus berdasarkan level kesulitan</CardDescription>
                       </CardHeader>
-                      <CardContent>
+                      <CardContent className="p-6">
                         {coursesReport.by_level.length === 0 ? (
                           <div className="text-center py-8">
                             <Layers className="h-12 w-12 text-gray-300 dark:text-gray-700 mx-auto mb-3" />
                             <p className="text-gray-500 dark:text-gray-400">Tidak ada data level</p>
                           </div>
                         ) : (
-                          <div className="space-y-3">
-                            {coursesReport.by_level.map((level) => {
-                              const total = coursesReport.by_level.reduce((s, l) => s + l.count, 0);
-                              const pct = total > 0 ? (level.count / total) * 100 : 0;
-                              const colors: Record<string, string> = { 
-                                BEGINNER: "bg-[#008A00]", 
-                                INTERMEDIATE: "bg-[#005EB8]", 
-                                ADVANCED: "bg-[#D93025]", 
-                                ALL_LEVELS: "bg-gray-500" 
-                              };
-                              return (
-                                <div key={level.level}>
-                                  <div className="flex justify-between mb-2">
-                                    <span className="text-sm font-medium text-gray-900 dark:text-white">{getLevelLabel(level.level)}</span>
-                                    <span className="text-sm text-gray-600 dark:text-gray-400">{level.count} kursus</span>
-                                  </div>
-                                  <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                    <div className={`h-full ${colors[level.level] || "bg-gray-500"} rounded-full`} style={{ width: `${pct}%` }} />
-                                  </div>
-                                  <div className="flex justify-between mt-1">
-                                    <span className="text-xs text-gray-500 dark:text-gray-400">{pct.toFixed(1)}%</span>
-                                    <span className="text-xs text-gray-500 dark:text-gray-400">{level.count} dari {total}</span>
-                                  </div>
+                        <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                          {coursesReport.by_level.map((level) => {
+                            const total = coursesReport.by_level.reduce((s, l) => s + l.count, 0);
+                            const pct = total > 0 ? (level.count / total) * 100 : 0;
+                            const colors: Record<string, string> = { 
+                              BEGINNER: "bg-[#008A00]", 
+                              INTERMEDIATE: "bg-[#005EB8]", 
+                              ADVANCED: "bg-[#D93025]", 
+                              ALL_LEVELS: "bg-gray-500" 
+                            };
+                            return (
+                              <div key={level.level} className="py-4 first:pt-0 last:pb-0">
+                                <div className="flex justify-between mb-1">
+                                  <span className="text-sm font-medium text-gray-900 dark:text-white flex items-center gap-2">
+                                    <span className={`w-3 h-3 rounded-full ${colors[level.level] || "bg-gray-500"}`} />
+                                    {getLevelLabel(level.level)}
+                                  </span>
+                                  <span className="text-sm text-gray-500 dark:text-gray-400">{level.count} ({pct.toFixed(0)}%)</span>
                                 </div>
-                              );
-                            })}
-                          </div>
+                                <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                  <div className={`h-full ${colors[level.level] || "bg-gray-500"}`} style={{ width: `${pct}%` }} />
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
                         )}
                       </CardContent>
                     </Card>
