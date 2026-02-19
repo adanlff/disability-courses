@@ -164,7 +164,7 @@ export default function UserSettings() {
                   </CardTitle>
                   <CardDescription className="text-gray-600 dark:text-gray-400">Pastikan password baru Anda kuat dan mudah diingat</CardDescription>
                 </CardHeader>
-                <CardContent className="pt-6">
+                <CardContent className="pt-4">
                   <form onSubmit={handleChangePassword} className="space-y-6">
                     {/* Alerts */}
                     {error && (
@@ -333,7 +333,7 @@ export default function UserSettings() {
                     Kriteria Password
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pt-6">
+                <CardContent className="pt-4">
                   <div className="space-y-3">
                     {passwordCriteria.map((criteria, index) => (
                       <div key={index} className="flex items-center gap-2">
@@ -359,7 +359,7 @@ export default function UserSettings() {
                     Tips Keamanan
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pt-6">
+                <CardContent className="pt-4">
                   <ul className="space-y-3 text-sm">
                     <li className="flex items-start gap-2">
                       <div className="p-1 bg-[#005EB8]/20 rounded">
