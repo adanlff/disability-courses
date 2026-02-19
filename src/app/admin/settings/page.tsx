@@ -563,7 +563,7 @@ export default function AdminSettings() {
                     Tambah Setting Baru
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-6">
                   <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                     <Input 
                       placeholder="Key (misal: site_name)" 
@@ -643,7 +643,7 @@ export default function AdminSettings() {
                         </Badge>
                       </CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="pt-6">
                       <div className="space-y-4">
                         {categorySettings.map((setting) => (
                           <div key={setting.id} className="flex flex-col md:flex-row md:items-center gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">

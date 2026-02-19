@@ -477,53 +477,45 @@ export default function AdminCertificatesPage() {
 
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700">
-              <CardContent className="p-4">
+            <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700 hover:shadow-md">
+              <CardContent className="p-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-[#005EB8]/10">
-                    <Award className="h-5 w-5 text-[#005EB8]" />
-                  </div>
+                  <Award className="h-6 w-6 text-[#005EB8]" />
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Total Sertifikat</p>
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Sertifikat</p>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
-            <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700">
-              <CardContent className="p-4">
+            <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700 hover:shadow-md">
+              <CardContent className="p-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-[#008A00]/10">
-                    <CheckCircle className="h-5 w-5 text-[#008A00]" />
-                  </div>
+                  <CheckCircle className="h-6 w-6 text-[#008A00]" />
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Terbit</p>
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Terbit</p>
                     <p className="text-2xl font-bold text-[#008A00]">{stats.issued}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
-            <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700">
-              <CardContent className="p-4">
+            <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700 hover:shadow-md">
+              <CardContent className="p-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-[#F4B400]/10">
-                    <Clock className="h-5 w-5 text-[#F4B400]" />
-                  </div>
+                  <Clock className="h-6 w-6 text-[#F4B400]" />
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Pending</p>
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Pending</p>
                     <p className="text-2xl font-bold text-[#F4B400]">{stats.pending}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
-            <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700">
-              <CardContent className="p-4">
+            <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700 hover:shadow-md">
+              <CardContent className="p-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-[#D93025]/10">
-                    <FileText className="h-5 w-5 text-[#D93025]" />
-                  </div>
+                  <FileText className="h-6 w-6 text-[#D93025]" />
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Template</p>
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Template</p>
                     <p className="text-2xl font-bold text-[#D93025]">{stats.templates}</p>
                   </div>
                 </div>
@@ -542,7 +534,7 @@ export default function AdminCertificatesPage() {
             <TabsContent value="certificates" className="space-y-4">
               {/* Certificates Table Card */}
               <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 border-gray-200 dark:border-gray-700 overflow-hidden">
-                <CardHeader className="pb-4 border-b border-gray-200 dark:border-gray-700">
+                <CardHeader className="pb-3 border-b">
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
                       <CardTitle className="text-xl font-bold flex items-center gap-2 text-gray-900 dark:text-white">
@@ -674,10 +666,13 @@ export default function AdminCertificatesPage() {
             {/* Templates Tab */}
             <TabsContent value="templates" className="space-y-4">
               <Card className="rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-md border-gray-200 dark:border-gray-700">
-                <CardHeader>
+                <CardHeader className="pb-3 border-b">
                   <div className="flex items-center justify-between">
                     <div>
-                      <CardTitle className="text-xl font-bold text-gray-900 dark:text-white">Template Sertifikat</CardTitle>
+                      <CardTitle className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <FileText className="h-5 w-5 text-[#005EB8]" />
+                        Template Sertifikat
+                      </CardTitle>
                       <CardDescription>Upload dan kelola template HTML sertifikat</CardDescription>
                     </div>
                     <Button onClick={openCreateModal} className="bg-[#005EB8] hover:bg-[#004A93] text-white">
@@ -686,7 +681,7 @@ export default function AdminCertificatesPage() {
                     </Button>
                   </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-6">
                   {loadingTemplates ? (
                     <div className="flex items-center justify-center py-12">
                       <Loader2 className="h-8 w-8 animate-spin text-[#005EB8]" />
