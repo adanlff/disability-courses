@@ -126,7 +126,8 @@ const formatCurrency = (amount: number) => {
   }).format(amount);
 };
 
-const formatDuration = (minutes: number) => {
+const formatDuration = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60);
   if (minutes < 60) return `${minutes} menit`;
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;
@@ -347,6 +348,9 @@ export default function CourseDetailPage() {
   }
 
   const totalMaterials = course.sections?.reduce((acc, s) => acc + s.materials.length, 0) || 0;
+  const totalCourseDuration = course.sections?.reduce((acc, s) => {
+    return acc + s.materials.reduce((mAcc, m) => mAcc + (m.duration || 0), 0);
+  }, 0) || 0;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -376,7 +380,7 @@ export default function CourseDetailPage() {
                 </Badge>
                 <Badge variant="outline" className="border-gray-300 dark:border-gray-600">
                   <Clock className="h-3 w-3 mr-1" />
-                  {formatDuration(course.total_duration)}
+                  {formatDuration(totalCourseDuration)}
                 </Badge>
               </div>
 
@@ -556,7 +560,7 @@ export default function CourseDetailPage() {
                         <div className="p-2 rounded-lg bg-[#005EB8]/10">
                           <PlayCircle className="h-4 w-4 text-[#005EB8]" />
                         </div>
-                        <span className="text-gray-700 dark:text-gray-300">{formatDuration(course.total_duration)} video on-demand</span>
+                        <span className="text-gray-700 dark:text-gray-300">{formatDuration(totalCourseDuration)} video on-demand</span>
                       </div>
                       <div className="flex items-center gap-3">
                         <div className="p-2 rounded-lg bg-[#F4B400]/10">
@@ -611,7 +615,7 @@ export default function CourseDetailPage() {
                       Konten Kursus
                     </CardTitle>
                     <CardDescription className="mt-1">
-                      {course.sections?.length || 0} section • {totalMaterials} materi • {formatDuration(course.total_duration)}
+                      {course.sections?.length || 0} section • {totalMaterials} materi • {formatDuration(totalCourseDuration)}
                     </CardDescription>
                   </div>
                 </div>
@@ -633,7 +637,7 @@ export default function CourseDetailPage() {
                               {section.title}
                             </h3>
                             <p className="text-sm text-gray-500 dark:text-gray-400">
-                              {section.materials.length} materi • {formatDuration(section.duration)}
+                              {section.materials.length} materi • {formatDuration(section.materials.reduce((acc, m) => acc + (m.duration || 0), 0))}
                             </p>
                           </div>
                         </div>
