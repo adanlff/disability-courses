@@ -62,22 +62,22 @@ function VerifyEmailContent() {
 
   const sampleTestimonials = [
     {
-      avatarSrc: "https://randomuser.me/api/portraits/women/44.jpg",
-      name: "Aisha Rahma",
-      handle: "@aishadigital",
-      text: "Platform yang sangat inklusif! Membantu saya belajar dengan cara yang paling nyaman sesuai kebutuhan saya.",
+      avatarSrc: "https://randomuser.me/api/portraits/women/57.jpg",
+      name: "Sarah Chen",
+      handle: "@sarahdigital",
+      text: "Platform yang luar biasa! Pengalaman pengguna sangat lancar dan fiturnya tepat sesuai yang saya butuhkan.",
+    },
+    {
+      avatarSrc: "https://randomuser.me/api/portraits/men/64.jpg",
+      name: "Marcus Johnson",
+      handle: "@marcustech",
+      text: "Layanan ini telah mengubah cara saya bekerja. Desain bersih, fitur powerful, dan dukungan yang excellent.",
     },
     {
       avatarSrc: "https://randomuser.me/api/portraits/men/32.jpg",
-      name: "Budi Santoso",
-      handle: "@buditech",
-      text: "Fitur aksesibilitasnya luar biasa. Sangat jarang menemukan platform yang benar-benar memikirkan semua pengguna.",
-    },
-    {
-      avatarSrc: "https://randomuser.me/api/portraits/women/68.jpg",
-      name: "Linda Wijaya",
-      handle: "@linda_w",
-      text: "Pengalaman verifikasi yang cepat dan aman. Saya merasa tenang menggunakan platform yang mengutamakan keamanan akun.",
+      name: "David Martinez",
+      handle: "@davidcreates",
+      text: "Saya sudah mencoba banyak platform, tapi yang ini benar-benar menonjol. Intuitif, reliable, dan sangat membantu produktivitas.",
     },
   ];
 
@@ -361,7 +361,7 @@ function VerifyEmailContent() {
       <section className="hidden md:block flex-1 relative p-4">
         <div
           className="animate-slide-right animate-delay-300 absolute inset-4 rounded-lg bg-cover bg-center"
-          style={{ backgroundImage: `url(https://images.unsplash.com/photo-1620574387735-3624d75b2dbc?w=2160&q=80)` }}
+          style={{ backgroundImage: `url(https://images.unsplash.com/photo-1642615835477-d303d7dc9ee9?w=2160&q=80)` }}
         ></div>
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4 px-8 w-full justify-center">
           <TestimonialCard
