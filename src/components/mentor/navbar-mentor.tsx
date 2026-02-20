@@ -2,8 +2,13 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { LogOut, Menu, UserCircle, Settings } from "lucide-react";
-import { ThemeDropdownItem } from "@/components/ui/theme-dropdown-item";
+import { 
+  UserCircle, 
+  Settings, 
+  LogOut, 
+  Menu
+} from "lucide-react";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -192,6 +197,8 @@ export default function NavbarMentor({ toggleSidebar }: NavbarMentorProps) {
             </div>
 
             <div className="flex items-center gap-3">
+              <AnimatedThemeToggler />
+              
               <div className="h-8 w-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
             </div>
           </div>
@@ -278,7 +285,8 @@ export default function NavbarMentor({ toggleSidebar }: NavbarMentorProps) {
                 >
                   {/* User info in dropdown */}
                   {userData && (
-                    <div className="px-3 py-3 border-b border-gray-200 dark:border-gray-700">
+                    <>
+                    <div className="px-3 py-3">
                       <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
                         {userData.name}
                       </p>
@@ -291,36 +299,42 @@ export default function NavbarMentor({ toggleSidebar }: NavbarMentorProps) {
                         </p>
                       </div>
                     </div>
+                    <DropdownMenuSeparator className="bg-gray-200/60 dark:bg-gray-700/60 h-px" />
+                    </>
                   )}
 
                   {/* Profile dan Settings */}
-                  <div className="py-1">
-                    {dropdownMenuItems.map((item) => {
-                      const Icon = item.icon;
-                      return (
-                        <DropdownMenuItem
-                          key={item.label}
-                          asChild
-                          className="cursor-pointer px-3 py-2 text-sm text-gray-700 dark:text-gray-300 focus:!bg-[#005EB8] focus:!text-white"
+                  {dropdownMenuItems.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <DropdownMenuItem
+                        key={item.label}
+                        asChild
+                        className="cursor-pointer px-3 py-2 text-sm text-gray-700 dark:text-gray-300 focus:!bg-[#005EB8] focus:!text-white"
+                      >
+                        <Link
+                          href={item.link}
+                          className="flex items-center gap-3 w-full"
                         >
-                          <Link
-                            href={item.link}
-                            className="flex items-center gap-3 w-full"
-                          >
-                            <Icon className="h-4 w-4" />
-                            <span>{item.label}</span>
-                          </Link>
-                        </DropdownMenuItem>
-                      );
-                    })}
+                          <Icon className="h-4 w-4" />
+                          <span>{item.label}</span>
+                        </Link>
+                      </DropdownMenuItem>
+                    );
+                  })}
+
+                  <DropdownMenuSeparator className="bg-gray-200/60 dark:bg-gray-700/60 h-px" />
+                  
+                  {/* Tampilan (Theme Switcher) */}
+                  <div className="px-3 py-2 flex items-center justify-between">
+                    <div className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+                      <Settings className="h-4 w-4" />
+                      <span>Mode Tampilan</span>
+                    </div>
+                    <AnimatedThemeToggler className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" />
                   </div>
 
-                  <DropdownMenuSeparator className="bg-gray-200 dark:bg-gray-700" />
-                  
-                  {/* Theme Toggle */}
-                  <ThemeDropdownItem />
-
-                  <DropdownMenuSeparator className="bg-gray-200 dark:bg-gray-700" />
+                  <DropdownMenuSeparator className="bg-gray-200/60 dark:bg-gray-700/60 h-px" />
                   
                   {/* Logout (WARNA MERAH) */}
                   <DropdownMenuItem
