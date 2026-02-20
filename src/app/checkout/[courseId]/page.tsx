@@ -113,6 +113,14 @@ export default function CheckoutPage() {
     return null;
   }, []);
 
+  // Check authentication
+  useEffect(() => {
+    const token = getAuthToken();
+    if (!token) {
+      router.push(`/login?redirect=/checkout/${courseId}`);
+    }
+  }, [courseId, getAuthToken, router]);
+
   // Fetch course details
   useEffect(() => {
     const fetchCourse = async () => {

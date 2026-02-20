@@ -177,6 +177,14 @@ export default function CourseDetailPage() {
     return null;
   }, []);
 
+  // Check authentication
+  useEffect(() => {
+    const token = getAuthToken();
+    if (!token) {
+      router.push(`/login?redirect=/courses/${courseId}`);
+    }
+  }, [courseId, getAuthToken, router]);
+
   // Fetch course data - TIDAK DIUBAH
   useEffect(() => {
     const fetchCourse = async () => {
