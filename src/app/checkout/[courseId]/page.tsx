@@ -46,6 +46,14 @@ interface Course {
   category: {
     name: string;
   };
+  sections?: {
+    id: string;
+    duration: number;
+    materials: {
+      id: string;
+      duration: number;
+    }[];
+  }[];
 }
 
 declare global {
@@ -69,7 +77,8 @@ const formatCurrency = (amount: number) => {
   }).format(amount);
 };
 
-const formatDuration = (minutes: number) => {
+const formatDuration = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60);
   if (minutes < 60) return `${minutes} menit`;
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;
@@ -224,6 +233,10 @@ export default function CheckoutPage() {
 
   if (!course) return null;
 
+  const totalCourseDuration = course.sections?.reduce((acc, s) => {
+    return acc + s.materials.reduce((mAcc, m) => mAcc + (m.duration || 0), 0);
+  }, 0) || 0;
+
   const finalPrice = course.discount_price || course.price;
   const discount = course.discount_price ? course.price - course.discount_price : 0;
   const discountPercent = discount > 0 ? Math.round((discount / course.price) * 100) : 0;
@@ -317,7 +330,7 @@ export default function CheckoutPage() {
                         </Badge>
                         <span className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                           <Clock className="h-4 w-4" />
-                          {formatDuration(course.total_duration)}
+                          {formatDuration(totalCourseDuration)}
                         </span>
                         <span className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                           <Play className="h-4 w-4" />
