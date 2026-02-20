@@ -59,7 +59,12 @@ export function QuizSettingsModal({
     max_attempts?: string;
   }>({});
 
-  if (!open) return null;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
 
   // Validasi input
   const validateInputs = () => {
@@ -108,17 +113,7 @@ export function QuizSettingsModal({
     0
   );
 
-  // Calculate passing points
-  const passingPoints = Math.ceil(
-    (settings.passing_score / 100) * totalPoints
-  );
 
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    return () => setMounted(false);
-  }, []);
 
   if (!mounted || !open) return null;
 
@@ -212,7 +207,7 @@ export function QuizSettingsModal({
                       </div>
                       <div>
                         <p className="text-sm font-bold text-gray-900 dark:text-white">
-                          {passingPoints} Poin Lulus
+                          {Math.ceil((settings.passing_score / 100) * totalPoints)} Poin Lulus
                         </p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">
                           Minimal poin untuk lulus

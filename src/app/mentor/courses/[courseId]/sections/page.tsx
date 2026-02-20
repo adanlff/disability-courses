@@ -825,11 +825,11 @@ export default function SectionsPage() {
                           onClick={() => toggleSection(section.id)}
                         >
                           {expandedSections.has(section.id) ? (
-                            <ChevronUp className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                            <ChevronUp className="h-5 w-5 shrink-0 text-gray-500 dark:text-gray-400" />
                           ) : (
-                            <ChevronDown className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                            <ChevronDown className="h-5 w-5 shrink-0 text-gray-500 dark:text-gray-400" />
                           )}
-                          <div>
+                          <div className="min-w-0">
                             <CardTitle className="text-lg text-gray-900 dark:text-white">
                               Section {sectionIndex + 1}: {section.title}
                             </CardTitle>
@@ -841,12 +841,12 @@ export default function SectionsPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Badge className="bg-gray-100 text-gray-800 border border-gray-300 pointer-events-none dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600">
+                      <div className="flex items-center gap-2 shrink-0">
+                        <Badge className="bg-gray-100 text-gray-800 border border-gray-300 pointer-events-none dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 whitespace-nowrap shrink-0">
                           {section.materials.length} materi
                         </Badge>
-                        <Badge className="bg-gray-100 text-gray-800 border border-gray-300 pointer-events-none dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600">
-                          {formatDuration(section.duration)}
+                        <Badge className="bg-gray-100 text-gray-800 border border-gray-300 pointer-events-none dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 whitespace-nowrap shrink-0">
+                          {formatDuration(section.materials.reduce((acc, m) => acc + (m.duration || 0), 0))}
                         </Badge>
                         {isEditable && (
                           <>
