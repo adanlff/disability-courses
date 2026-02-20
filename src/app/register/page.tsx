@@ -101,7 +101,7 @@ export default function RegisterPageComponent() {
       // Redirect to verify email page after delay
       setTimeout(() => {
         router.push(`/verify-email?email=${encodeURIComponent(formData.email)}`);
-      }, 3000);
+      }, 1000);
     } catch (error) {
       console.error("Registrasi gagal:", error);
 

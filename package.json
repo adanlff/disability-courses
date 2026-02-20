@@ -15,7 +15,10 @@
     "test:watch": "jest --watch",
     "test:json": "jest --json --outputFile=test-reports/test-results.json",
     "test:html": "jest --coverage && echo 'HTML report: coverage/lcov-report/index.html'",
-    "test:report": "jest --json --outputFile=test-reports/test-results.json && jest --coverage"
+    "test:report": "jest --json --outputFile=test-reports/test-results.json && jest --coverage",
+    "db:clear": "npx tsx prisma/clear-data.ts",
+    "db:seed": "npx prisma db seed",
+    "db:reset": "npm run db:clear && npm run db:seed"
   },
   "prisma": {
     "seed": "npx ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"

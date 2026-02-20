@@ -212,7 +212,7 @@ function VerifyEmailContent() {
                     <label className="text-sm font-medium text-muted-foreground">
                       Alamat Email
                     </label>
-                    {email && !showEmailChange && (
+                    {email && !showEmailChange && countdown === 0 && (
                       <button
                         type="button"
                         onClick={() => setShowEmailChange(true)}
@@ -254,6 +254,12 @@ function VerifyEmailContent() {
                         {email}
                       </p>
                     </div>
+                  )}
+                  
+                  {countdown === 0 && !showEmailChange && email && (
+                    <p className="text-xs text-muted-foreground mt-2 animate-element">
+                      Tidak menerima kode? Pastikan alamat email di atas sudah benar atau coba kirim ulang.
+                    </p>
                   )}
                 </div>
 
