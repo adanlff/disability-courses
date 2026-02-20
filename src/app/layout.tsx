@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import AccessibilityWidget from "@/components/accessibility/accessibility-overlay";
+import ScrollbarManager from "@/components/layout/scrollbar-manager";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,6 +28,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           {children}
           <AccessibilityWidget />
+          <ScrollbarManager />
         </ThemeProvider>
       </body>
     </html>
