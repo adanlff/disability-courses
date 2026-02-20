@@ -71,9 +71,8 @@ export default function Header() {
               href="/"
               className="flex items-center gap-2 transition-transform hover:scale-105"
             >
-              <BookOpen className="h-7 w-7 text-[#005EB8]" />
               <span className="text-xl font-bold text-gray-900 dark:text-white">
-                EduAccess
+                SetarUp
               </span>
             </Link>
 

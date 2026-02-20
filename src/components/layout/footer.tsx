@@ -39,8 +39,7 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2 group">
-              <BookOpen className="h-7 w-7 text-[#005EB8]" />
-              <span className="text-xl font-bold text-[#005EB8]">EduAccess</span>
+              <span className="text-xl font-bold text-[#005EB8]">SetarUp</span>
             </Link>
             <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
               Platform pembelajaran online yang dirancang khusus untuk penyandang disabilitas dengan fitur aksesibilitas lengkap.
@@ -122,7 +121,7 @@ export default function Footer() {
                 <div className="p-1.5 bg-[#005EB8]/10 rounded-md">
                   <Mail className="h-3.5 w-3.5 text-[#005EB8]" />
                 </div>
-                <span>info@eduaccess.id</span>
+                <span>info@setarup.id</span>
               </li>
             </ul>
           </div>
@@ -132,7 +131,7 @@ export default function Footer() {
         <div className="border-t border-gray-200 dark:border-gray-700 mt-10 pt-6">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              © {new Date().getFullYear()} EduAccess. Hak Cipta Dilindungi.
+              © {new Date().getFullYear()} SetarUp. Hak Cipta Dilindungi.
             </p>
             <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-500">
               <Link href="/privacy" className="hover:text-[#005EB8] transition-colors">
