@@ -2,13 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { 
-  UserCircle, 
-  Settings, 
-  LogOut, 
-  Menu
-} from "lucide-react";
-import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
+import { LogOut, Menu, UserCircle, Settings } from "lucide-react";
+import { ThemeDropdownItem } from "@/components/ui/theme-dropdown-item";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -197,8 +192,6 @@ export default function NavbarMentor({ toggleSidebar }: NavbarMentorProps) {
             </div>
 
             <div className="flex items-center gap-3">
-              <AnimatedThemeToggler />
-              
               <div className="h-8 w-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
             </div>
           </div>
@@ -271,8 +264,6 @@ export default function NavbarMentor({ toggleSidebar }: NavbarMentorProps) {
             </div>
 
             <div className="flex items-center gap-3">
-              <AnimatedThemeToggler />
-
               <DropdownMenu>
                 <DropdownMenuTrigger
                   disabled={isLoggingOut}
@@ -323,6 +314,11 @@ export default function NavbarMentor({ toggleSidebar }: NavbarMentorProps) {
                       );
                     })}
                   </div>
+
+                  <DropdownMenuSeparator className="bg-gray-200 dark:bg-gray-700" />
+                  
+                  {/* Theme Toggle */}
+                  <ThemeDropdownItem />
 
                   <DropdownMenuSeparator className="bg-gray-200 dark:bg-gray-700" />
                   
